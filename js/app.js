@@ -7,7 +7,7 @@ const App = {
     // Estado del juego
     state: 'CONFIG', // CONFIG, PLAYING, DASHBOARD
     gameMode: 'TIMER',
-    timeLimit: 5 * 60 * 1000, // 5 minutos en ms
+    timeLimit: 1 * 60 * 1000, // 1 minuto en ms
 
     // Tablas seleccionadas (por defecto todas)
     selectedTables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
