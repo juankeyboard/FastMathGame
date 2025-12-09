@@ -9,15 +9,19 @@ const GridManager = {
     activeCell: null,
     cellStates: {},
     pendingOperations: [],
+    selectedTables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    totalOperations: 225,
 
-    init() {
+    init(tables = null) {
         this.container = document.getElementById('matrix-grid');
         this.cells = {};
         this.cellStates = {};
         this.activeCell = null;
         this.pendingOperations = [];
+        this.selectedTables = tables || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         this.render();
         this.initPendingOperations();
+        this.updateProgress();
     },
 
     render() {
@@ -31,6 +35,10 @@ const GridManager = {
         for (let i = 1; i <= 15; i++) {
             const headerCell = document.createElement('div');
             headerCell.className = 'matrix-cell header';
+            // Marcar headers de columnas deshabilitadas
+            if (!this.selectedTables.includes(i)) {
+                headerCell.classList.add('disabled');
+            }
             headerCell.textContent = i;
             this.container.appendChild(headerCell);
         }
@@ -38,6 +46,10 @@ const GridManager = {
         for (let row = 1; row <= 15; row++) {
             const rowHeader = document.createElement('div');
             rowHeader.className = 'matrix-cell header';
+            // Marcar headers de filas deshabilitadas
+            if (!this.selectedTables.includes(row)) {
+                rowHeader.classList.add('disabled');
+            }
             rowHeader.textContent = row;
             this.container.appendChild(rowHeader);
 
@@ -46,7 +58,14 @@ const GridManager = {
                 cell.className = 'matrix-cell';
                 cell.dataset.row = row;
                 cell.dataset.col = col;
-                cell.textContent = row * col;
+                cell.textContent = `${row}×${col}`;
+
+                // Marcar celdas fuera de las tablas seleccionadas
+                const isRowSelected = this.selectedTables.includes(row);
+                const isColSelected = this.selectedTables.includes(col);
+                if (!isRowSelected || !isColSelected) {
+                    cell.classList.add('disabled');
+                }
 
                 const key = `${row}-${col}`;
                 this.cells[key] = cell;
@@ -58,11 +77,13 @@ const GridManager = {
 
     initPendingOperations() {
         this.pendingOperations = [];
-        for (let row = 1; row <= 15; row++) {
-            for (let col = 1; col <= 15; col++) {
+        // Generar operaciones solo para las tablas seleccionadas
+        for (const row of this.selectedTables) {
+            for (const col of this.selectedTables) {
                 this.pendingOperations.push({ row, col });
             }
         }
+        this.totalOperations = this.pendingOperations.length;
         this.shuffleOperations();
     },
 
@@ -129,7 +150,7 @@ const GridManager = {
 
     updateProgress() {
         const progressEl = document.getElementById('matrix-progress');
-        progressEl.textContent = `${this.getCorrectCount()} / 225`;
+        progressEl.textContent = `${this.getCorrectCount()} / ${this.totalOperations}`;
     },
 
     reset() {

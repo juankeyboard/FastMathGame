@@ -9,6 +9,9 @@ const App = {
     gameMode: 'TIMER',
     timeLimit: 5 * 60 * 1000, // 5 minutos en ms
 
+    // Tablas seleccionadas (por defecto todas)
+    selectedTables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+
     // Timer/Cronómetro
     timerInterval: null,
     startTime: null,
@@ -57,6 +60,9 @@ const App = {
             csvUpload: document.getElementById('csv-upload'),
             fileLoaded: document.getElementById('file-loaded'),
             loadedFileName: document.getElementById('loaded-file-name'),
+
+            // Tables selector
+            tablesGrid: document.getElementById('tables-grid'),
 
             // Game
             timerLabel: document.getElementById('timer-label'),
@@ -150,6 +156,14 @@ const App = {
         this.elements.btnNewGame.addEventListener('click', () => {
             this.resetGame();
         });
+
+        // Tables selection
+        this.elements.tablesGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.table-btn');
+            if (btn && btn.dataset.table) {
+                this.toggleTable(parseInt(btn.dataset.table));
+            }
+        });
     },
 
     /**
@@ -181,6 +195,25 @@ const App = {
     updateModeUI() {
         const isTimer = this.elements.modeTimer.checked;
         this.elements.timerConfig.classList.toggle('hidden', !isTimer);
+    },
+
+    /**
+     * Alterna la selección de una tabla específica
+     */
+    toggleTable(tableNum) {
+        const index = this.selectedTables.indexOf(tableNum);
+        const btn = document.querySelector(`.table-btn[data-table="${tableNum}"]`);
+
+        if (index === -1) {
+            // Agregar tabla
+            this.selectedTables.push(tableNum);
+            this.selectedTables.sort((a, b) => a - b);
+            btn.classList.add('active');
+        } else {
+            // Quitar tabla
+            this.selectedTables.splice(index, 1);
+            btn.classList.remove('active');
+        }
     },
 
     /**
@@ -221,13 +254,19 @@ const App = {
             return;
         }
 
+        // Validar que hay al menos una tabla seleccionada
+        if (this.selectedTables.length === 0) {
+            alert('Por favor selecciona al menos una tabla para practicar');
+            return;
+        }
+
         // Configurar modo
         this.gameMode = this.elements.modeTimer.checked ? 'TIMER' : 'FREE';
         this.timeLimit = parseInt(this.elements.timeLimit.value) * 60 * 1000;
 
-        // Inicializar managers
+        // Inicializar managers con las tablas seleccionadas
         DataManager.init(nickname);
-        GridManager.init();
+        GridManager.init(this.selectedTables);
 
         // Reset stats
         this.correctCount = 0;
