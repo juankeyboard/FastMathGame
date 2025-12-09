@@ -74,6 +74,7 @@ const App = {
             summaryCorrect: document.getElementById('summary-correct'),
             summaryAvgTime: document.getElementById('summary-avg-time'),
             summaryAccuracy: document.getElementById('summary-accuracy'),
+            btnDownloadCsv: document.getElementById('btn-download-csv'),
             btnNewGame: document.getElementById('btn-new-game')
         };
     },
@@ -136,6 +137,13 @@ const App = {
         // End session
         this.elements.btnEndSession.addEventListener('click', () => {
             this.endGame();
+        });
+
+        // Download CSV
+        this.elements.btnDownloadCsv.addEventListener('click', () => {
+            if (DataManager.history.length > 0) {
+                DataManager.downloadCSV();
+            }
         });
 
         // New game
@@ -383,11 +391,6 @@ const App = {
         setTimeout(() => {
             ChartsManager.renderAll();
         }, 100);
-
-        // Descargar CSV
-        if (DataManager.history.length > 0) {
-            DataManager.downloadCSV();
-        }
     },
 
     /**
