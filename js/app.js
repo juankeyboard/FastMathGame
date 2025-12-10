@@ -56,10 +56,7 @@ const App = {
             timerConfig: document.getElementById('timer-config'),
             timeLimit: document.getElementById('time-limit'),
             timeDisplay: document.getElementById('time-display'),
-            fileDropZone: document.getElementById('file-drop-zone'),
-            csvUpload: document.getElementById('csv-upload'),
-            fileLoaded: document.getElementById('file-loaded'),
-            loadedFileName: document.getElementById('loaded-file-name'),
+
 
             // Tables selector
             tablesGrid: document.getElementById('tables-grid'),
@@ -104,34 +101,7 @@ const App = {
             this.elements.timeDisplay.textContent = `${e.target.value} min`;
         });
 
-        // File upload
-        this.elements.fileDropZone.addEventListener('click', () => {
-            this.elements.csvUpload.click();
-        });
 
-        this.elements.csvUpload.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                this.handleFileUpload(e.target.files[0]);
-            }
-        });
-
-        // Drag & Drop
-        this.elements.fileDropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            this.elements.fileDropZone.classList.add('dragover');
-        });
-
-        this.elements.fileDropZone.addEventListener('dragleave', () => {
-            this.elements.fileDropZone.classList.remove('dragover');
-        });
-
-        this.elements.fileDropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            this.elements.fileDropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) {
-                this.handleFileUpload(e.dataTransfer.files[0]);
-            }
-        });
 
         // Answer input
         this.elements.answerInput.addEventListener('keypress', (e) => {
@@ -216,33 +186,7 @@ const App = {
         }
     },
 
-    /**
-     * Maneja la carga de archivo CSV
-     */
-    async handleFileUpload(file) {
-        if (!file.name.endsWith('.csv')) {
-            alert('Por favor selecciona un archivo CSV válido');
-            return;
-        }
 
-        try {
-            const result = await DataManager.loadCSV(file);
-
-            // Mostrar indicador de archivo cargado
-            this.elements.fileDropZone.querySelector('.drop-content').hidden = true;
-            this.elements.fileLoaded.hidden = false;
-            this.elements.loadedFileName.textContent = file.name;
-
-            // Auto-fill nickname si se encontró
-            if (result.nickname) {
-                this.elements.nicknameInput.value = result.nickname;
-            }
-
-            console.log(`Cargados ${result.recordsLoaded} registros`);
-        } catch (error) {
-            alert('Error al cargar el archivo: ' + error.message);
-        }
-    },
 
     /**
      * Inicia el juego

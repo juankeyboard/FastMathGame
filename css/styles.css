@@ -325,55 +325,6 @@ body {
     text-align: right;
 }
 
-/* File Drop Zone */
-.file-drop-zone {
-    border: 2px dashed rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-md);
-    padding: var(--space-xl);
-    text-align: center;
-    cursor: pointer;
-    transition: var(--transition-normal);
-}
-
-.file-drop-zone:hover,
-.file-drop-zone.dragover {
-    border-color: var(--accent-primary);
-    background: rgba(99, 102, 241, 0.05);
-}
-
-.drop-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-sm);
-}
-
-.drop-icon {
-    font-size: 2rem;
-    opacity: 0.6;
-}
-
-.drop-text {
-    color: var(--text-secondary);
-}
-
-.drop-subtext {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.file-loaded {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    color: var(--success);
-}
-
-.file-loaded[hidden] {
-    display: none;
-}
-
 /* Start Button */
 .btn-start {
     width: 100%;
