@@ -35,10 +35,6 @@ const GridManager = {
         for (let i = 1; i <= 15; i++) {
             const headerCell = document.createElement('div');
             headerCell.className = 'matrix-cell header';
-            // Marcar headers de columnas deshabilitadas
-            if (!this.selectedTables.includes(i)) {
-                headerCell.classList.add('disabled');
-            }
             headerCell.textContent = i;
             this.container.appendChild(headerCell);
         }
@@ -60,10 +56,9 @@ const GridManager = {
                 cell.dataset.col = col;
                 cell.textContent = `${row}×${col}`;
 
-                // Marcar celdas fuera de las tablas seleccionadas
+                // Marcar celdas fuera de las tablas seleccionadas (solo se verifica la fila)
                 const isRowSelected = this.selectedTables.includes(row);
-                const isColSelected = this.selectedTables.includes(col);
-                if (!isRowSelected || !isColSelected) {
+                if (!isRowSelected) {
                     cell.classList.add('disabled');
                 }
 
@@ -77,9 +72,9 @@ const GridManager = {
 
     initPendingOperations() {
         this.pendingOperations = [];
-        // Generar operaciones solo para las tablas seleccionadas
+        // Generar operaciones: para cada tabla seleccionada, incluir toda la fila (de 1 a 15)
         for (const row of this.selectedTables) {
-            for (const col of this.selectedTables) {
+            for (let col = 1; col <= 15; col++) {
                 this.pendingOperations.push({ row, col });
             }
         }
