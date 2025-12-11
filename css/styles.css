@@ -1618,3 +1618,26 @@ input[type="number"]:focus {
     color: white !important;
     border-color: var(--clr-green-500) !important;
 }
+
+/* ===== BACKGROUND IMAGE ===== */
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.4; /* 60% transparencia = 40% opacidad */
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Modo oscuro - reducir más la opacidad */
+[data-theme="dark"] body::before {
+    opacity: 0.2;
+}

@@ -20,6 +20,7 @@ Fusionamos la autoridad clásica del texto "Aritmética de Baldor" con la suavid
 | **Accesibilidad (a11y)** | Contraste AA/AAA, textos siempre oscuros sobre fondos claros |
 | **Touch-First** | Botones mínimo 48px, áreas de clic amplias |
 | **Modo Oscuro** | Soporte via `[data-theme="dark"]` |
+| **Imagen de Fondo** | `images/background.png` con 60% transparencia |
 
 ---
 
