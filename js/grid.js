@@ -73,6 +73,14 @@ const GridManager = {
                 const key = `${row}-${col}`;
                 this.cells[key] = cell;
                 this.cellStates[key] = null;
+
+                // Event listener para mostrar resultado al hacer clic
+                cell.addEventListener('click', () => {
+                    if (!cell.classList.contains('disabled') && !cell.classList.contains('header')) {
+                        this.showResultOnClick(row, col);
+                    }
+                });
+
                 this.container.appendChild(cell);
             }
         }
@@ -236,6 +244,30 @@ const GridManager = {
             cell.classList.remove('showing-help');
             delete cell.dataset.originalContent;
         }
+    },
+
+    /**
+     * Muestra el resultado de la operación al hacer clic en la celda
+     * El resultado se muestra temporalmente (2 segundos) en blanco y negro
+     */
+    showResultOnClick(row, col) {
+        const key = `${row}-${col}`;
+        const cell = this.cells[key];
+        if (!cell) return;
+
+        const result = row * col;
+        const originalContent = cell.textContent;
+        const originalClasses = cell.className;
+
+        // Mostrar resultado
+        cell.textContent = result;
+        cell.classList.add('show-answer');
+
+        // Restaurar después de 2 segundos
+        setTimeout(() => {
+            cell.textContent = originalContent;
+            cell.className = originalClasses;
+        }, 2000);
     }
 };
 
