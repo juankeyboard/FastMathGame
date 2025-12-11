@@ -230,7 +230,7 @@ body {
 /* Mode Selector */
 .mode-selector {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
 }
 
@@ -912,6 +912,7 @@ body {
 .matrix-cell.header.disabled {
     opacity: 0.3;
 }
+
 /* ===== MODAL DE INACTIVIDAD ===== */
 .modal-overlay {
     position: fixed;
@@ -949,6 +950,7 @@ body {
         opacity: 0;
         transform: scale(0.9) translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -1012,7 +1014,7 @@ body {
     border-color: rgba(139, 92, 246, 0.3);
 }
 
-.mode-selector input[type="radio"]:checked + .mode-option-adaptive {
+.mode-selector input[type="radio"]:checked+.mode-option-adaptive {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
     border-color: var(--accent-secondary);
     box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
@@ -1076,8 +1078,15 @@ body {
 }
 
 @keyframes pulseBadge {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+    }
 }
 
 /* Contador de debilidades */
@@ -1125,8 +1134,15 @@ body {
 }
 
 @keyframes pulseWeakness {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-    50% { box-shadow: 0 0 8px 2px rgba(245, 158, 11, 0.2); }
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 8px 2px rgba(245, 158, 11, 0.2);
+    }
 }
 
 .matrix-cell.hidden-adaptive {
@@ -1140,8 +1156,15 @@ body {
 }
 
 @keyframes scanAnimation {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1) rotate(5deg); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(5deg);
+    }
 }
 
 .modal-submessage {
@@ -1157,8 +1180,15 @@ body {
 }
 
 @keyframes victoryBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .victory-stats {
@@ -1204,6 +1234,7 @@ body {
         transform: scale(1);
         box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
     }
+
     100% {
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
@@ -1253,5 +1284,3 @@ body {
     background: var(--accent-primary);
     color: white;
 }
-
-
