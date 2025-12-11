@@ -1641,3 +1641,21 @@ body::before {
 [data-theme="dark"] body::before {
     opacity: 0.2;
 }
+
+/* ===== CELDA ACTIVA (OPERACION ACTUAL) ===== */
+
+.matrix-cell.active {
+    background-color: var(--clr-sand-300) !important;
+    border: 3px solid var(--clr-rose-500) !important;
+    color: var(--clr-ink-900) !important;
+    transform: scale(1.15);
+    z-index: 20;
+    box-shadow: 0 0 15px rgba(209, 107, 165, 0.5);
+}
+
+/* ===== BTN END POSITION ===== */
+
+.operation-display .btn-end {
+    margin-top: var(--space-lg);
+    width: 100%;
+}
