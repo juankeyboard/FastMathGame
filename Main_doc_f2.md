@@ -31,7 +31,7 @@ El flujo se divide en dos fases secuenciales:
 
 | Aspecto | Descripcion |
 |---------|-------------|
-| **Fase Diagnostico** | El "Kill Switch" de 30 segundos esta ACTIVO |
+| **Fase Diagnostico** | El "Kill Switch" de 30 segundos esta ACTIVO y el timer es en cuenta regresiva |
 | **Fase Entrenamiento** | El "Kill Switch" de 30 segundos esta **DESACTIVADO** |
 | **Razon** | Durante el entrenamiento, el usuario puede necesitar mas tiempo para pensar y aprender |
 
@@ -39,9 +39,9 @@ El flujo se divide en dos fases secuenciales:
 
 | Fase | Comportamiento del Timer |
 |------|--------------------------|
-| **Fase Diagnostico** | Timer cuenta regresiva de **60 segundos** (igual que modo Contrarreloj) |
+| **Fase Diagnostico** | Timer cuenta y se visualiza en cuenta regresiva de **30 segundos** por cada operación, si se agota el tiempo pasa a otra operación |
 | **Fase Entrenamiento** | Timer cuenta hacia arriba (cronometro) sin limite |
-| **Si se agota el tiempo** | En fase diagnostico, el juego termina y muestra resultados parciales |
+| **Si se agota el tiempo** | En fase diagnostico, se pasa a otra operación hasta terminar de ver todas las operaciones y mostrar resultados parciales |
 | **Razon** | La presion del tiempo durante el diagnostico ayuda a detectar debilidades reales bajo estres cognitivo |
 
 ### 2.2. Criterios de Seleccion de "Debilidades"
@@ -90,7 +90,7 @@ Durante la Fase de Entrenamiento, se activa una **ayuda visual automatica**:
 |---------|-------------|
 | **Activacion** | Cuando el tiempo de respuesta actual supera el tiempo promedio de la sesion de diagnostico |
 | **Accion** | Se muestra el resultado correcto de la operacion en la celda de la matriz |
-| **Duracion** | La ayuda se muestra por **2 segundos** |
+| **Duracion** | La ayuda se muestra por **2 segundos** cada 3 segundos |
 | **Despues** | La operacion vuelve a presentarse para que el usuario la responda |
 | **Objetivo** | Reforzar el aprendizaje mediante visualizacion antes de requerir la respuesta |
 
