@@ -761,10 +761,18 @@ input[type="number"]:focus {
     font-size: 1rem;
 }
 
+.logo-banner {
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
 /* ===== CONFIG FORM ===== */
 
 .config-form {
-    background: var(--clr-surface-high);
+    background: #fdf6b4;
     border: 2px solid var(--clr-sand-300);
     border-radius: var(--radius-lg);
     padding: var(--space-xl);
@@ -1235,7 +1243,7 @@ input[type="number"]:focus {
 }
 
 .controls-panel {
-    background: var(--clr-surface-high);
+    background: #fdf6b4;
     border: 2px solid var(--clr-sand-300);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
