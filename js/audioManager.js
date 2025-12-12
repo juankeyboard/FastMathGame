@@ -19,10 +19,11 @@ const AudioManager = (() => {
     const audioConfig = {
         bgm: {
             gameplay: 'audio/bgm/baldora_bgm_gameplay.mp3',
-            menu: 'audio/bgm/baldora_bgm_menu.mp3'
+            menu: 'audio/bgm/baldora_bgm_menu.mp3',
+            stats: 'audio/bgm/baldora_bgm_stats.mp3'
         },
         sfx: {
-            correct: 'audio/sfx/baldora_sfx_correct.mp3',
+            correct: 'audio/sfx/baldora_sfx_right.mp3',
             wrong: 'audio/sfx/baldora_sfx_wrong.mp3',
             click: 'audio/sfx/baldora_sfx_ui_click.mp3',
             win: 'audio/sfx/baldora_sfx_win.mp3',

@@ -533,6 +533,8 @@ const App = {
         if (isCorrect) {
             GridManager.markCorrect(row, col);
             this.correctCount++;
+            // Reproducir sonido de acierto
+            AudioManager.playCorrect();
         } else {
             GridManager.markWrong(row, col);
             this.wrongCount++;
@@ -622,6 +624,9 @@ const App = {
         // Detener música de fondo
     AudioManager.stopBGM();
 
+        // Iniciar música de estadísticas
+        AudioManager.playBGM('stats');
+
     // Mostrar dashboard
         this.showView('DASHBOARD');
 
@@ -636,6 +641,8 @@ const App = {
      */
     resetGame() {
         this.clearInactivityTimer();
+        // Detener cualquier música
+        AudioManager.stopBGM();
         this.elements.timerDisplayEl.classList.remove('warning');
         DataManager.resetSession();
         ChartsManager.destroyAll();

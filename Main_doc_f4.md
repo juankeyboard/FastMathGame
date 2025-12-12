@@ -1,16 +1,16 @@
-# Documento Maestro de Ingeniería: Fase 4 - Sistema de Audio (Piloto)
+# Documento Maestro de Ingeniería: Fase 4 - Sistema de Audio
 
-**Versión:** 4.1 (Compacta / Piloto)  
+**Versión:** 4.2 (Implementado)  
 **Fecha:** 12 de Diciembre, 2025  
 **Proyecto:** Fast Math Game  
-**Enfoque:** Implementación Modular y Prueba de Concepto  
+**Estado:** ✅ Implementado y Funcional  
 **Formato de Salida:** .md (Markdown)
 
 ---
 
 ## 1. Visión General
 
-Este documento define la integración de la capa sonora bajo una estrategia de **"Despliegue Progresivo"**. Se iniciará con una **Prueba Piloto** utilizando únicamente dos (2) archivos críticos para validar la latencia y el bucle (loop) en el motor del juego sin sobrecargar la carga inicial.
+Este documento define la integración de la capa sonora bajo una estrategia de **"Despliegue Progresivo"**. El sistema de audio ha sido implementado exitosamente con música de fondo y efectos de sonido sincronizados con las acciones del juego.
 
 ---
 
@@ -23,89 +23,212 @@ Para garantizar compatibilidad universal, rendimiento y libertad legal:
 | **Formato Maestro** | `.mp3` |
 | **Frecuencia** | 44100 Hz (44.1 kHz) |
 | **Licencia** | CC0 (Creative Commons Zero - Dominio Público). Sin atribución. |
+| **Prefijo de Archivos** | `baldora_` (identificador del proyecto) |
 
-### Estructura de Directorios
-
-La carpeta raíz de sonido será `audio` (al mismo nivel que `js` o `css`), eliminando la dependencia de una carpeta padre `assets`.
+### Estructura de Directorios (Implementada)
 
 ```
 FastMathGame/
 │
 ├── index.html
 ├── js/
-│   └── audioManager.js  <-- Nuevo controlador
-├── audio/               <-- Nueva Raíz
-│   ├── bgm/             <-- Música de Fondo (Background Music)
-│   └── sfx/             <-- Efectos de Sonido (Sound Effects)
+│   ├── audioManager.js  ← Controlador de Audio
+│   ├── app.js           ← Integración con lógica del juego
+│   └── ...
+├── audio/
+│   ├── bgm/             ← Música de Fondo (Background Music)
+│   │   ├── baldora_bgm_gameplay.mp3  ✅
+│   │   └── baldora_bgm_stats.mp3     ✅
+│   └── sfx/             ← Efectos de Sonido (Sound Effects)
+│       ├── baldora_sfx_wrong.mp3     ✅
+│       └── baldora_sfx_right.mp3     ✅
 ```
 
 ---
 
-## 3. Fase 1: Montaje Piloto (Prueba de Concepto)
+## 3. Archivos de Audio Implementados
 
-Antes de cargar la librería completa, se validará el motor con solo **dos archivos esenciales**.
+### Música de Fondo (BGM)
 
-### Objetivo de la Prueba
+| Archivo | Ubicación | Propósito | Estado |
+|---------|-----------|-----------|--------|
+| `baldora_bgm_gameplay.mp3` | `audio/bgm/` | Música durante el juego (loop infinito) | ✅ Activo |
+| `baldora_bgm_stats.mp3` | `audio/bgm/` | Música para pantalla de estadísticas | ✅ Disponible |
 
-1. Verificar que la música de fondo (bgm) haga **loop sin cortes** perceptibles.
-2. Verificar que el efecto de sonido (sfx) se dispare **inmediatamente** (baja latencia) al interactuar.
+### Efectos de Sonido (SFX)
 
-### Archivos Requeridos para el Piloto
-
-| Carpeta | Archivo | Propósito |
-|---------|---------|-----------|
-| `audio/bgm/` | `bgm_gameplay.mp3` | Música de fondo para validar el sistema de Loop infinito. |
-| `audio/sfx/` | `sfx_wrong.mp3` | Sonido de error para validar la sincronización con el feedback visual. |
-
----
-
-## 4. Fase 2: Expansión Progresiva (Roadmap)
-
-Una vez validado el piloto, se añadirán los siguientes archivos a las carpetas correspondientes. El código `audioManager.js` estará preparado para recibir estos nombres sin necesidad de reestructurar la lógica central.
-
-### Cola de Implementación (Prioridad 2)
-
-- `sfx_correct.mp3` (Acierto - Alta prioridad)
-- `sfx_ui_click.mp3` (Feedback de botones)
-- `sfx_win.mp3` (Victoria / Matriz llena)
-- `sfx_gameover.mp3` (Tiempo agotado)
-- `bgm_menu.mp3` (Ambiente para la pantalla de configuración)
+| Archivo | Ubicación | Propósito | Estado |
+|---------|-----------|-----------|--------|
+| `baldora_sfx_wrong.mp3` | `audio/sfx/` | Sonido al ingresar respuesta incorrecta | ✅ Activo |
+| `baldora_sfx_right.mp3` | `audio/sfx/` | Sonido al ingresar respuesta correcta | ✅ Disponible |
 
 ---
 
-## 5. Especificaciones del AudioManager (Lógica JS)
+## 4. Integración con el Juego
 
-El controlador de audio (`js/audioManager.js`) debe cumplir con los siguientes requisitos de ingeniería:
+### Eventos de Audio Implementados
 
-### 5.1 Carga Previa (Preload)
-Instanciar los objetos `new Audio()` al iniciar la aplicación (en el constructor de la clase), no al momento de reproducir.
+| Evento del Juego | Función en `app.js` | Llamada de Audio |
+|------------------|---------------------|------------------|
+| **Iniciar juego** | `startGame()` | `AudioManager.playBGM('gameplay')` |
+| **Respuesta incorrecta** | `submitAnswer()` | `AudioManager.playWrong()` |
+| **Timeout en diagnóstico** | `handleDiagnosisTimeout()` | `AudioManager.playWrong()` |
+| **Terminar juego** | `endGame()` | `AudioManager.stopBGM()` |
 
-### 5.2 Polifonía (Overlap)
-Permitir que los SFX se superpongan si el jugador responde muy rápido (ej: usando `.cloneNode()` al reproducir efectos).
+### Características Técnicas Implementadas
 
-### 5.3 Persistencia de Mute
-- Debe existir un **botón de Mute/Unmute** en la UI.
-- El estado debe guardarse en `localStorage`. Si el usuario silencia el juego, debe permanecer silenciado al recargar la página.
-
-### 5.4 Tolerancia a Fallos
-Si un archivo de audio falta en la carpeta (ej: aún no se ha subido el `sfx_win.mp3`), el juego **no debe romperse**; debe capturar el error y continuar silenciosamente.
-
----
-
-## 6. Siguientes Pasos
-
-1. **Adquisición:** Conseguir/Generar `bgm_gameplay.mp3` y `sfx_wrong.mp3` (Licencia CC0).
-2. **Conversión:** Asegurar que estén en MP3 44.1kHz.
-3. **Estructura:** Crear la carpeta `audio` y sus subcarpetas `bgm` y `sfx`.
-4. **Código:** Desarrollar e integrar `audioManager.js`.
+| Característica | Descripción | Estado |
+|----------------|-------------|--------|
+| **Carga Previa (Preload)** | Instancia `new Audio()` al iniciar la app | ✅ |
+| **Loop Infinito** | BGM se reproduce en bucle continuo | ✅ |
+| **Sin Reinicio** | BGM no se reinicia al cambiar de operación | ✅ |
+| **Polifonía (Overlap)** | SFX usa `.cloneNode()` para superposición | ✅ |
+| **Persistencia de Mute** | Estado guardado en `localStorage` | ✅ |
+| **Tolerancia a Fallos** | Captura errores sin romper el juego | ✅ |
+| **Botón Mute/Unmute** | UI global en esquina superior derecha | ✅ |
 
 ---
 
-## 7. Checklist de Implementación
+## 5. AudioManager - API Pública
 
-- [ ] Crear estructura de carpetas `audio/bgm/` y `audio/sfx/`
-- [ ] Crear `js/audioManager.js` con la clase AudioManager
-- [ ] Agregar botón de mute/unmute a la UI
-- [ ] Integrar AudioManager en `app.js`
-- [ ] Agregar estilos CSS para el botón de audio
-- [ ] Probar con archivos de audio placeholder
+### Archivo: `js/audioManager.js`
+
+```javascript
+AudioManager = {
+    // Inicialización
+    init(),                    // Inicializa y precarga audios
+    
+    // Música de Fondo
+    playBGM(trackName),        // Reproduce BGM ('gameplay', 'menu', 'stats')
+    stopBGM(),                 // Detiene BGM actual
+    pauseBGM(),                // Pausa BGM
+    resumeBGM(),               // Reanuda BGM pausado
+    
+    // Efectos de Sonido
+    playSFX(sfxName),          // Reproduce SFX genérico
+    playCorrect(),             // Atajo: sonido de acierto
+    playWrong(),               // Atajo: sonido de error
+    playClick(),               // Atajo: sonido de UI
+    playWin(),                 // Atajo: sonido de victoria
+    playGameover(),            // Atajo: sonido de game over
+    
+    // Control de Mute
+    toggleMute(),              // Alterna mute/unmute
+    getMuteState()             // Retorna estado actual de mute
+}
+```
+
+---
+
+## 6. Configuración de Rutas de Audio
+
+En `audioManager.js`, líneas 18-31:
+
+```javascript
+const audioConfig = {
+    bgm: {
+        gameplay: 'audio/bgm/baldora_bgm_gameplay.mp3',
+        menu: 'audio/bgm/baldora_bgm_menu.mp3',
+        stats: 'audio/bgm/baldora_bgm_stats.mp3'
+    },
+    sfx: {
+        correct: 'audio/sfx/baldora_sfx_right.mp3',
+        wrong: 'audio/sfx/baldora_sfx_wrong.mp3',
+        click: 'audio/sfx/baldora_sfx_ui_click.mp3',
+        win: 'audio/sfx/baldora_sfx_win.mp3',
+        gameover: 'audio/sfx/baldora_sfx_gameover.mp3'
+    }
+};
+```
+
+---
+
+## 7. UI del Botón de Audio
+
+### HTML (`index.html`)
+
+```html
+<button type="button" id="btn-audio-toggle" class="audio-toggle-btn" 
+        onclick="AudioManager.toggleMute()" title="Silenciar">&#128266;</button>
+```
+
+### CSS (`styles.css`)
+
+```css
+.audio-toggle-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    /* ... estilos completos en líneas 1724-1757 */
+}
+```
+
+### Iconos
+
+| Estado | Icono | Código HTML |
+|--------|-------|-------------|
+| Sonido activo | 🔊 | `&#128266;` |
+| Silenciado | 🔇 | `&#128263;` |
+
+---
+
+## 8. Roadmap de Expansión
+
+### Audios Pendientes de Implementación
+
+| Prioridad | Archivo | Propósito |
+|-----------|---------|-----------|
+| Alta | `baldora_sfx_correct.mp3` → Renombrar a nombre correcto | Integrar con `submitAnswer()` |
+| Media | `baldora_sfx_ui_click.mp3` | Feedback en botones de configuración |
+| Media | `baldora_sfx_win.mp3` | Victoria en modo adaptativo |
+| Media | `baldora_sfx_gameover.mp3` | Tiempo agotado |
+| Baja | `baldora_bgm_menu.mp3` | Ambiente en pantalla de configuración |
+
+### Integraciones Pendientes
+
+1. **Sonido de acierto**: Agregar `AudioManager.playCorrect()` en `submitAnswer()` cuando `isCorrect === true`
+2. **Sonido de victoria**: Agregar en `showAdaptiveVictory()`
+3. **Música de menú**: Agregar en `showView('CONFIG')`
+4. **Música de stats**: Agregar `AudioManager.playBGM('stats')` en `endGame()`
+
+---
+
+## 9. Notas Técnicas
+
+### Autoplay en Navegadores
+
+Los navegadores modernos bloquean el autoplay de audio hasta que el usuario interactúe con la página. Por esta razón:
+- La música **solo comienza después de hacer clic** en "COMENZAR"
+- No es posible reproducir audio automáticamente al cargar la página
+
+### Persistencia del Estado de Mute
+
+```javascript
+const STORAGE_KEY = 'fastMathGame_audioMuted';
+// Guardar: localStorage.setItem(STORAGE_KEY, isMuted.toString());
+// Cargar: localStorage.getItem(STORAGE_KEY);
+```
+
+---
+
+## 10. Checklist de Implementación
+
+- [x] Crear estructura de carpetas `audio/bgm/` y `audio/sfx/`
+- [x] Crear `js/audioManager.js` con la clase AudioManager
+- [x] Agregar botón de mute/unmute a la UI
+- [x] Integrar AudioManager en `app.js`
+- [x] Agregar estilos CSS para el botón de audio
+- [x] Implementar `baldora_bgm_gameplay.mp3` (música de juego)
+- [x] Implementar `baldora_sfx_wrong.mp3` (sonido de error)
+- [x] Agregar `baldora_bgm_stats.mp3` (música de estadísticas)
+- [x] Agregar `baldora_sfx_right.mp3` (sonido de acierto)
+- [ ] Integrar sonido de acierto en el código
+- [ ] Integrar música de estadísticas en el código
+- [ ] Agregar sonidos adicionales (click, win, gameover)
+
+---
+
+**Última actualización:** 12 de Diciembre, 2025 - 15:38
