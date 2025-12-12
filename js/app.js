@@ -1,4 +1,4 @@
-/**
+﻿/**
  * APP.JS - Lógica principal del juego (Game Loop, State Machine)
  * Fast Math Game
  */
@@ -407,6 +407,9 @@ const App = {
 
         // Focus en input
         this.elements.answerInput.focus();
+
+    // Iniciar música de fondo
+    AudioManager.playBGM('gameplay');
     },
 
     /**
@@ -506,6 +509,9 @@ const App = {
 
         // Focus
         this.elements.answerInput.focus();
+
+    // Iniciar música de fondo
+    AudioManager.playBGM('gameplay');
     },
 
     /**
@@ -533,6 +539,8 @@ const App = {
         } else {
             GridManager.markWrong(row, col);
             this.wrongCount++;
+        // Reproducir sonido de error
+        AudioManager.playWrong();
         }
 
         // === MODO ADAPTATIVO: Guardar métricas ===
@@ -614,7 +622,10 @@ const App = {
         this.elements.summaryAvgTime.textContent = `${stats.avgTime}ms`;
         this.elements.summaryAccuracy.textContent = `${stats.accuracy}%`;
 
-        // Mostrar dashboard
+        // Detener música de fondo
+    AudioManager.stopBGM();
+
+    // Mostrar dashboard
         this.showView('DASHBOARD');
 
         // Renderizar gráficas
@@ -805,6 +816,9 @@ const App = {
         // Cargar primera operación de entrenamiento
         this.loadNextOperation();
         this.elements.answerInput.focus();
+
+    // Iniciar música de fondo
+    AudioManager.playBGM('gameplay');
     },
 
     /**
@@ -864,6 +878,8 @@ const App = {
         // Marcar como error en la grilla
         GridManager.markWrong(row, col);
         this.wrongCount++;
+        // Reproducir sonido de error
+        AudioManager.playWrong();
         this.updateStats();
         GridManager.updateProgress();
 

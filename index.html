@@ -32,6 +32,8 @@
 </head>
 
 <body>
+    <!-- Boton de Audio Toggle (Global) -->
+    <button type="button" id="btn-audio-toggle" class="audio-toggle-btn" onclick="AudioManager.toggleMute()" title="Silenciar">&#128266;</button>
     
     <!-- ===== VISTA DE CONFIGURACION (INICIO) ===== -->
     <section id="config-view" class="view active">
@@ -344,6 +346,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="js/audioManager.js"></script>
     <script src="js/data.js"></script>
     <script src="js/grid.js"></script>
     <script src="js/charts.js"></script>
