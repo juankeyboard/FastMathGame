@@ -64,6 +64,11 @@ const App = {
         this.cacheElements();
         this.bindEvents();
         this.showView('CONFIG');
+
+        // Inicializar sistema de Onboarding
+        if (typeof Onboarding !== 'undefined') {
+            Onboarding.init();
+        }
     },
 
     /**
@@ -233,16 +238,30 @@ const App = {
         this.elements.gameView.classList.remove('active');
         this.elements.dashboardView.classList.remove('active');
 
+        // Actualizar el botón de ayuda según la vista
+        const helpBtn = document.getElementById('btn-help-tour');
+
         switch (view) {
             case 'CONFIG':
                 this.elements.configView.classList.add('active');
                 AudioManager.playBGM('menu');
+                if (helpBtn) {
+                    helpBtn.onclick = () => Onboarding.replayTour('config');
+                    helpBtn.style.display = 'flex';
+                }
                 break;
             case 'PLAYING':
                 this.elements.gameView.classList.add('active');
+                if (helpBtn) {
+                    helpBtn.onclick = () => Onboarding.replayTour('game');
+                    helpBtn.style.display = 'flex';
+                }
                 break;
             case 'DASHBOARD':
                 this.elements.dashboardView.classList.add('active');
+                if (helpBtn) {
+                    helpBtn.style.display = 'none';
+                }
                 break;
         }
     },
@@ -267,6 +286,11 @@ const App = {
         if (isAdaptive && this.selectedRows.length === 1 && this.selectedRows[0] === 1 && this.selectedCols.length === 1 && this.selectedCols[0] === 1) {
             this.selectAllRows();
             this.selectAllCols();
+        }
+
+        // Disparar tour de modo adaptativo si se selecciona por primera vez
+        if (isAdaptive && typeof Onboarding !== 'undefined') {
+            Onboarding.startAdaptiveTour();
         }
     },
 
@@ -436,6 +460,11 @@ const App = {
 
         // Iniciar música de fondo
         AudioManager.playBGM('gameplay');
+
+        // Disparar tour de gameplay si es primera vez
+        if (typeof Onboarding !== 'undefined') {
+            Onboarding.startGameplayTour();
+        }
     },
 
     /**

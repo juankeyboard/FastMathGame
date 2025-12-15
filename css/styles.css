@@ -1762,3 +1762,174 @@ body::before {
     background: var(--clr-sand-300);
     opacity: 0.7;
 }
+
+/* ===== DRIVER.JS ONBOARDING STYLES ===== */
+
+/* Popover principal */
+.driver-popover {
+    background-color: var(--clr-surface-high) !important;
+    border: 2px solid var(--clr-sand-300) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: 0 10px 40px rgba(126, 200, 227, 0.25) !important;
+    font-family: var(--font-main) !important;
+    color: var(--clr-ink-900) !important;
+    padding: var(--space-lg) !important;
+    max-width: 340px !important;
+}
+
+/* Título del popover */
+.driver-popover-title {
+    font-family: var(--font-display) !important;
+    font-size: 1.25rem !important;
+    color: var(--clr-rose-700) !important;
+    margin-bottom: var(--space-sm) !important;
+    line-height: 1.3 !important;
+}
+
+/* Descripción del popover */
+.driver-popover-description {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    color: var(--clr-rock-500) !important;
+}
+
+.driver-popover-description strong {
+    color: var(--clr-ink-900) !important;
+    font-weight: 700 !important;
+}
+
+/* Barra de progreso */
+.driver-popover-progress-text {
+    font-size: 0.8rem !important;
+    color: var(--clr-rock-500) !important;
+    margin-top: var(--space-sm) !important;
+}
+
+/* Footer con botones */
+.driver-popover-footer {
+    margin-top: var(--space-md) !important;
+    padding-top: var(--space-md) !important;
+    border-top: 1px solid var(--clr-sand-300) !important;
+    gap: var(--space-sm) !important;
+}
+
+/* Botón Siguiente / Entendido */
+.driver-popover-next-btn,
+.driver-popover-done-btn {
+    background: var(--clr-rose-500) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: var(--radius-full) !important;
+    padding: var(--space-sm) var(--space-md) !important;
+    font-family: var(--font-main) !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    text-shadow: none !important;
+    cursor: pointer !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.driver-popover-next-btn:hover,
+.driver-popover-done-btn:hover {
+    background: var(--clr-rose-700) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(209, 107, 165, 0.4) !important;
+}
+
+/* Botón Atrás */
+.driver-popover-prev-btn {
+    color: var(--clr-rock-500) !important;
+    background: transparent !important;
+    border: 1px solid var(--clr-sand-300) !important;
+    border-radius: var(--radius-full) !important;
+    padding: var(--space-sm) var(--space-md) !important;
+    font-family: var(--font-main) !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    cursor: pointer !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.driver-popover-prev-btn:hover {
+    background: var(--clr-sand-100) !important;
+    border-color: var(--clr-rock-500) !important;
+}
+
+/* Botón Cerrar (X) */
+.driver-popover-close-btn {
+    color: var(--clr-rock-500) !important;
+    font-size: 1.2rem !important;
+    transition: color var(--transition-fast) !important;
+}
+
+.driver-popover-close-btn:hover {
+    color: var(--clr-rose-500) !important;
+}
+
+/* Flecha del popover */
+.driver-popover-arrow {
+    border-color: var(--clr-surface-high) !important;
+}
+
+.driver-popover-arrow-side-left,
+.driver-popover-arrow-side-right {
+    border-left-color: var(--clr-surface-high) !important;
+    border-right-color: var(--clr-surface-high) !important;
+}
+
+.driver-popover-arrow-side-top,
+.driver-popover-arrow-side-bottom {
+    border-top-color: var(--clr-surface-high) !important;
+    border-bottom-color: var(--clr-surface-high) !important;
+}
+
+/* Overlay blanco suave */
+.driver-overlay {
+    background: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Botón de ayuda (repetir tour) */
+.btn-help-tour {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--clr-surface-high);
+    border: 2px solid var(--clr-sand-300);
+    font-size: 1.3rem;
+    cursor: pointer;
+    z-index: 1400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all var(--transition-fast);
+    color: var(--clr-rock-500);
+}
+
+.btn-help-tour:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    border-color: var(--clr-rose-500);
+    color: var(--clr-rose-500);
+}
+
+/* Modo oscuro para onboarding */
+[data-theme="dark"] .driver-popover {
+    background-color: var(--clr-surface-high) !important;
+    border-color: var(--clr-sand-300) !important;
+}
+
+[data-theme="dark"] .driver-popover-title {
+    color: var(--clr-rose-500) !important;
+}
+
+[data-theme="dark"] .driver-popover-description {
+    color: var(--clr-ink-100) !important;
+}
+
+[data-theme="dark"] .driver-overlay {
+    background: rgba(30, 41, 59, 0.7) !important;
+}
