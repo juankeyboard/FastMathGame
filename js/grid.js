@@ -1,6 +1,6 @@
 /**
  * GRID.JS - Renderizado y manipulación de la matriz 15x15
- * Fast Math Game
+ * Baldora
  */
 
 const GridManager = {

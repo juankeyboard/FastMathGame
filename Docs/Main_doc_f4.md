@@ -2,7 +2,7 @@
 
 **Versión:** 4.3 (Actualizado)  
 **Fecha:** 15 de Diciembre, 2025  
-**Proyecto:** Fast Math Game  
+**Proyecto:** Baldora  
 **Estado:** ✅ Implementado y Funcional
 
 ---
@@ -25,7 +25,7 @@ Este documento define la implementación de la capa sonora del juego. El sistema
 ### Estructura de Directorios
 
 ```
-FastMathGame/
+Baldora/
 ├── js/
 │   └── audioManager.js  ← Controlador de Audio
 ├── audio/
@@ -196,7 +196,7 @@ Esquina superior derecha de la pantalla, siempre visible (z-index: 1500).
 ## 8. Persistencia del Estado de Mute
 
 ```javascript
-const STORAGE_KEY = 'fastMathGame_audioMuted';
+const STORAGE_KEY = 'baldora_audioMuted';
 
 // Guardar
 localStorage.setItem(STORAGE_KEY, isMuted.toString());

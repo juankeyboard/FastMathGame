@@ -1,6 +1,6 @@
 /**
  * CHARTS.JS - Configuración de gráficas con Chart.js
- * Fast Math Game
+ * Baldora
  */
 
 const ChartsManager = {

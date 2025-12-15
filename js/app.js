@@ -1,6 +1,6 @@
 ﻿/**
  * APP.JS - Lógica principal del juego (Game Loop, State Machine)
- * Fast Math Game
+ * Baldora
  */
 
 const App = {

@@ -1,5 +1,5 @@
 /**
- * AudioManager - Controlador de Audio para Fast Math Game
+ * AudioManager - Controlador de Audio para Baldora
  * Versión: 1.0 (Piloto)
  * 
  * Características:
@@ -13,7 +13,7 @@
 const AudioManager = (() => {
     // ===== ESTADO PRIVADO =====
     let isMuted = false;
-    const STORAGE_KEY = 'fastMathGame_audioMuted';
+    const STORAGE_KEY = 'baldora_audioMuted';
 
     // ===== CONFIGURACIÓN DE AUDIO =====
     const audioConfig = {

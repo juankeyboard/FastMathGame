@@ -1,8 +1,8 @@
-# Documento Maestro de Ingeniería: Proyecto "Fast Math Game"
+# Documento Maestro de Ingeniería: Proyecto "Baldora"
 
 **Versión:** 1.1 (Actualizado)  
 **Fecha:** 15 de Diciembre, 2025  
-**Proyecto:** Fast Math Game  
+**Proyecto:** Baldora  
 **Propósito:** Videojuego educativo para aprender y practicar la multiplicación.  
 **Plataforma Objetivo:** Web (HTML5/JS)  
 **Formato de Salida:** .md (Markdown)
@@ -11,7 +11,7 @@
 
 ## 1. Visión General del Proyecto
 
-Fast Math Game es una aplicación web interactiva diseñada como una herramienta de entrenamiento diario para estudiantes y entusiastas de las matemáticas. Su objetivo principal es facilitar la práctica, memorización y agilidad mental en las tablas de multiplicar, extendiendo el desafío estándar hasta una matriz de 15 x 15.
+Baldora es una aplicación web interactiva diseñada como una herramienta de entrenamiento diario para estudiantes y entusiastas de las matemáticas. Su objetivo principal es facilitar la práctica, memorización y agilidad mental en las tablas de multiplicar, extendiendo el desafío estándar hasta una matriz de 15 x 15.
 
 El sistema gamifica el proceso de aprendizaje mediante retroalimentación visual y auditiva inmediata, y un sistema robusto de análisis de datos que permite al usuario visualizar su progreso.
 
@@ -105,7 +105,7 @@ Utilizando Chart.js, se muestran cuatro visualizaciones clave basadas en los dat
 
 El archivo .csv contiene los datos de la sesión actual. Se reinicia en cada nueva partida.
 
-**Formato del Archivo:** `FastMathGame_[Nickname]_[YYYYMMDD]_[HHMMSS].csv`
+**Formato del Archivo:** `Baldora_[Nickname]_[YYYYMMDD]_[HHMMSS].csv`
 
 **Método de Descarga:**
 El sistema utiliza la **File System Access API** (estándar moderno y seguro) que abre un diálogo nativo de "Guardar como..." permitiendo al usuario elegir la ubicación del archivo. Incluye fallback con FileSaver.js para navegadores sin soporte.
@@ -131,7 +131,7 @@ El sistema utiliza la **File System Access API** (estándar moderno y seguro) qu
 ### 7.1. Estructura de Archivos
 
 ```
-FastMathGame/
+Baldora/
 │
 ├── index.html          # Estructura DOM única
 ├── css/

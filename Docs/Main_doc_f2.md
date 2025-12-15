@@ -1,7 +1,7 @@
 ﻿# Documento Maestro de Ingeniería: Modo Entrenamiento Adaptativo
 
 **Versión:** 2.1 (Actualizado)  
-**Proyecto:** Fast Math Game  
+**Proyecto:** Baldora  
 **Fecha:** 15 de Diciembre, 2025  
 **Estado:** ✅ Implementado y Funcional
 

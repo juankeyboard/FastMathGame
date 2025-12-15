@@ -1,7 +1,7 @@
 # Documento Maestro de Ingeniería: UX/UI Design System
 
 **Versión:** 3.5 (Actualizado)  
-**Proyecto:** Fast Math Game  
+**Proyecto:** Baldora  
 **Fecha:** 15 de Diciembre, 2025  
 **Concepto:** "Baldor Watercolor" - Acuarela Digital  
 **Estado:** ✅ Implementado
