@@ -426,6 +426,11 @@ const App = {
         // Focus en input
         this.elements.answerInput.focus();
 
+        // Activar sonido automáticamente al iniciar el juego
+        if (AudioManager.getMuteState()) {
+            AudioManager.toggleMute();
+        }
+
         // Reproducir sonido de inicio
         AudioManager.playStart();
 

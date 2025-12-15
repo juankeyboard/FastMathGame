@@ -97,7 +97,7 @@ const AudioManager = (() => {
         try {
             const audio = new Audio();
             audio.src = path;
-            audio.volume = 0.7;
+            audio.volume = 0.5;
             audio.preload = 'auto';
 
             // Manejar errores de carga silenciosamente
