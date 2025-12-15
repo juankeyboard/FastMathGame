@@ -994,7 +994,7 @@ input[type="number"]:focus {
 }
 
 .chart-card {
-    background: var(--clr-surface-high);
+    background: #fdf6b4;
     border: 2px solid var(--clr-sand-300);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
@@ -1016,7 +1016,7 @@ input[type="number"]:focus {
 }
 
 .summary-card {
-    background: var(--clr-surface-high);
+    background: #fdf6b4;
     border: 2px solid var(--clr-sand-300);
     border-radius: var(--radius-md);
     padding: var(--space-md);
@@ -1224,7 +1224,7 @@ input[type="number"]:focus {
 
 .game-container {
     display: grid;
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 1fr auto;
     gap: var(--space-lg);
     padding: var(--space-lg);
     max-width: 1400px;
@@ -1232,6 +1232,7 @@ input[type="number"]:focus {
     background: transparent;
     border: none;
     box-shadow: none;
+    align-items: start;
 }
 
 .matrix-panel {
@@ -1243,6 +1244,8 @@ input[type="number"]:focus {
 }
 
 .controls-panel {
+    position: sticky;
+    top: var(--space-lg);
     background: #fdf6b4;
     border: 2px solid var(--clr-sand-300);
     border-radius: var(--radius-lg);
@@ -1251,6 +1254,9 @@ input[type="number"]:focus {
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
+    width: fit-content;
+    height: fit-content;
+    align-self: start;
 }
 
 .matrix-header {
