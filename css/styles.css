@@ -1933,3 +1933,131 @@ body::before {
 [data-theme="dark"] .driver-overlay {
     background: rgba(30, 41, 59, 0.7) !important;
 }
+
+/* ===== FOOTER INSTITUCIONAL ===== */
+
+.main-footer {
+    width: 100%;
+    background-color: var(--clr-sand-100);
+    border-top: 2px solid var(--clr-sand-300);
+    padding: var(--space-lg) var(--space-xl);
+    margin-top: auto;
+    font-family: var(--font-main);
+    color: var(--clr-rock-500);
+    font-size: 0.9rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- BLOQUE DE MARCA --- */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.brand-logo {
+    height: 32px;
+    width: auto;
+    display: block;
+}
+
+.brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: var(--clr-ink-100);
+}
+
+/* --- BLOQUE LEGAL --- */
+.footer-legal {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-legal a {
+    color: var(--clr-rock-500);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--clr-rock-500);
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-legal a:hover {
+    color: var(--clr-rose-500);
+    border-color: var(--clr-rose-500);
+}
+
+.footer-legal .separator {
+    margin: 0 var(--space-sm);
+    opacity: 0.5;
+}
+
+/* --- BLOQUE SOCIAL --- */
+.footer-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-rock-500);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-social a:hover {
+    color: var(--clr-rose-500);
+    transform: scale(1.1);
+}
+
+.icon-instagram {
+    display: block;
+}
+
+/* --- RESPONSIVE FOOTER --- */
+@media (max-width: 600px) {
+    .footer-content {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+    }
+    
+    .footer-brand {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .footer-legal {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .footer-legal .separator {
+        display: none;
+    }
+}
+
+/* --- DARK MODE FOOTER --- */
+[data-theme="dark"] .main-footer {
+    background-color: var(--clr-surface-high);
+    border-color: var(--clr-sand-300);
+    color: var(--clr-rock-500);
+}
+
+[data-theme="dark"] .brand-name {
+    color: var(--clr-ink-900);
+}
+
+[data-theme="dark"] .footer-legal a {
+    color: var(--clr-rock-500);
+    border-color: var(--clr-rock-500);
+}
+
+[data-theme="dark"] .footer-social a {
+    color: var(--clr-rock-500);
+}
