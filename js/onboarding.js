@@ -83,7 +83,7 @@ const Onboarding = {
                 element: '.factors-selection-container',
                 popover: {
                     title: '🔢 Diseña tu ejercicio!',
-                    description: 'Selecciona los factores de las operaciones que quieres practicar. Presiona comenzar a entrenar tu habilidad matemática.',
+                    description: 'Selecciona los factores de las operaciones que quieres practicar. Presiona comenzar y empieza a fortalecer tu pensamiento matemático.',
                     side: 'top',
                     align: 'center'
                 }
