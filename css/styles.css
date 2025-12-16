@@ -2043,6 +2043,24 @@ body::before {
     display: block;
 }
 
+/* --- CONTADOR DE VISITAS --- */
+.visit-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--clr-rock-500);
+    font-size: 0.85rem;
+}
+
+.visit-counter .icon-visitors {
+    opacity: 0.7;
+}
+
+#visit-count {
+    font-weight: 600;
+    min-width: 30px;
+}
+
 /* --- RESPONSIVE FOOTER (Tablet) --- */
 @media (max-width: 768px) {
     .main-footer {
