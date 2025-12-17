@@ -297,7 +297,40 @@
                 </div>
             </div>
 
-            <div class="charts-grid">
+            <!-- ===== PANEL DE ANÁLISIS AI ===== -->
+            <div id="ai-analysis-container" class="ai-panel">
+                <div class="ai-header">
+                    <span class="ai-icon">&#129504;</span>
+                    <h3 class="ai-title">Entrenador Virtual</h3>
+
+                </div>
+                <div class="ai-content-layout">
+                    <div class="ai-character-col">
+                        <div class="character-avatar-wrapper">
+                            <img src="images/baldora_personaje.png" alt="Baldora" class="ai-character-img">
+                        </div>
+                    </div>
+                    <div class="ai-text-col">
+                        <div id="ai-state-idle" class="ai-state-box">
+                            <p class="ai-prompt-text">Sesion finalizada. Quieres que analice tu rendimiento y desbloquee
+                                tus graficas?</p>
+                            <button onclick="GeminiService.triggerAnalysis()" class="btn-primary ai-action-btn">&#10024;
+                                Analizar mis Resultados</button>
+                        </div>
+                        <div id="ai-state-loading" class="ai-state-box" style="display: none;">
+                            <div class="ai-loading-spinner">
+                                <div class="pulse-ring"></div>
+                            </div>
+                            <p class="ai-loading-text">Conectando sinapsis... Analizando patrones...</p>
+                        </div>
+                        <div id="ai-state-success" class="ai-state-box" style="display: none;">
+                            <div id="ai-response-text" class="ai-text-bubble"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid charts-hidden" id="dashboard-charts-area">
                 <div class="chart-card">
                     <h3 class="chart-title">Distribucion de Rendimiento</h3>
                     <div class="chart-container">
@@ -531,6 +564,8 @@
     <script src="js/onboarding.js"></script>
     <script src="js/visitor-counter.js"></script>
     <script src="js/exportManager.js"></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/gemini-service.js"></script>
     <script src="js/app.js"></script>
 </body>
 

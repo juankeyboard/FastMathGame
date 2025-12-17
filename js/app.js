@@ -674,10 +674,15 @@ const App = {
         // Iniciar música de estadísticas
         AudioManager.playBGM('stats');
 
+        // Preparar UI de AI (Estado Idle + Ocultar Gráficas)
+        if (typeof GeminiService !== 'undefined') {
+            GeminiService.reset();
+        }
+
         // Mostrar dashboard
         this.showView('DASHBOARD');
 
-        // Renderizar gráficas
+        // Renderizar gráficas (aunque estén ocultas, se preparan para cuando se revelen)
         setTimeout(() => {
             ChartsManager.renderAll();
         }, 100);
