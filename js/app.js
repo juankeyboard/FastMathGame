@@ -113,7 +113,7 @@ const App = {
             summaryCorrect: document.getElementById('summary-correct'),
             summaryAvgTime: document.getElementById('summary-avg-time'),
             summaryAccuracy: document.getElementById('summary-accuracy'),
-            btnDownloadCsv: document.getElementById('btn-download-csv'),
+            btnDownloadResults: document.getElementById('btn-download-results'),
             btnNewGame: document.getElementById('btn-new-game'),
 
             // Modo Adaptativo
@@ -174,13 +174,8 @@ const App = {
             this.endGame();
         });
 
-        // Download CSV
-        this.elements.btnDownloadCsv.addEventListener('click', () => {
-            if (DataManager.history.length > 0) {
-                AudioManager.playClick();
-                DataManager.downloadCSV();
-            }
-        });
+
+        // Download: Ahora manejado via onclick en HTML con ExportManager.openModal()
 
         // New game
         this.elements.btnNewGame.addEventListener('click', () => {

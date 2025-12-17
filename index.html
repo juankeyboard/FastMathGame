@@ -27,6 +27,9 @@
     <!-- FileSaver.js -->
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
+    <!-- html2pdf.js - Exportación PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <!-- Driver.js - Onboarding Tours -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
     <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
@@ -261,8 +264,9 @@
             <div class="dashboard-header">
                 <h2 class="dashboard-title">&#128202; Analiticas de Sesion</h2>
                 <div class="dashboard-actions">
-                    <button type="button" class="btn-download" id="btn-download-csv">
-                        &#128229; Descargar CSV
+                    <button type="button" class="btn-download" id="btn-download-results"
+                        onclick="ExportManager.openModal()">
+                        &#128229; Descargar Resultados
                     </button>
                     <button type="button" class="btn-secondary" id="btn-new-game">
                         Nueva Partida
@@ -372,6 +376,87 @@
             </button>
         </div>
     </div>
+    <!-- ===== MODAL DE EXPORTACION ===== -->
+    <div id="modal-export" class="modal-overlay">
+        <div class="modal-content" style="text-align: center; max-width: 550px;">
+            <h2 style="font-family: var(--font-display); color: var(--clr-rose-500); margin-bottom: 10px;">
+                Descargar Resultados
+            </h2>
+            <p style="margin-bottom: 25px; color: var(--clr-rock-500);">
+                Elige el formato de tu reporte:
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                <button onclick="ExportManager.downloadPDF()" class="btn-export-option">
+                    <span class="export-icon">&#128196;</span>
+                    <span class="export-title">Reporte PDF</span>
+                    <span class="export-desc">Con gráficas y análisis</span>
+                </button>
+                <button onclick="ExportManager.downloadCSV()" class="btn-export-option">
+                    <span class="export-icon">&#128202;</span>
+                    <span class="export-title">Datos CSV</span>
+                    <span class="export-desc">Para Excel / Datos crudos</span>
+                </button>
+            </div>
+            <button onclick="ExportManager.closeModal()"
+                style="background: none; border: none; text-decoration: underline; cursor: pointer; color: var(--clr-rock-500);">
+                Cancelar y volver
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== PLANTILLA OCULTA PARA PDF ===== -->
+    <div id="pdf-wrapper" style="position: absolute; left: -9999px; top: 0;">
+        <div id="pdf-template" class="pdf-letter-container">
+            <header class="pdf-header">
+                <img src="images/baldora_banner.png" alt="Baldora" class="pdf-logo">
+                <div class="header-text">
+                    <h1 class="pdf-title">Analiticas de Sesion</h1>
+                    <p class="pdf-subtitle">Reporte de Rendimiento Aritmetico</p>
+                </div>
+            </header>
+            <section class="pdf-metrics-bar">
+                <div class="metric-item"><span class="label">JUGADOR</span><span class="value" id="pdf-nick">--</span>
+                </div>
+                <div class="metric-item"><span class="label">FECHA</span><span class="value" id="pdf-date">--</span>
+                </div>
+                <div class="metric-item"><span class="label">MODO</span><span class="value" id="pdf-mode">--</span>
+                </div>
+                <div class="metric-item"><span class="label">ACIERTOS</span><span class="value" id="pdf-score">--</span>
+                </div>
+            </section>
+            <section class="pdf-ai-insight">
+                <div class="ai-icon-box">&#129504;</div>
+                <div class="ai-content">
+                    <h3 class="ai-title">Analisis de Entrenador Virtual</h3>
+                    <p id="pdf-ai-comment" class="ai-text">Generando...</p>
+                </div>
+            </section>
+            <section class="pdf-charts-area">
+                <div class="chart-wrapper">
+                    <h4>Rendimiento</h4>
+                    <div id="slot-chart-1" class="img-slot"></div>
+                </div>
+                <div class="chart-wrapper">
+                    <h4>Errores por Tabla</h4>
+                    <div id="slot-chart-2" class="img-slot"></div>
+                </div>
+                <div class="chart-wrapper">
+                    <h4>Top Errores</h4>
+                    <div id="slot-chart-3" class="img-slot"></div>
+                </div>
+                <div class="chart-wrapper">
+                    <h4>Velocidad</h4>
+                    <div id="slot-chart-4" class="img-slot"></div>
+                </div>
+            </section>
+            <footer class="pdf-footer">
+                <div class="footer-left"><img src="images/jcg_logo.png" class="footer-logo"><span>JCG Games</span></div>
+                <div class="footer-center"><small>Generado por Baldora</small></div>
+                <div class="footer-right"><span>@baldoragame</span></div>
+            </footer>
+        </div>
+    </div>
+
     <!-- ===== FOOTER INSTITUCIONAL ===== -->
     <footer class="main-footer">
         <div class="footer-content">
@@ -422,13 +507,15 @@
                 <a href="https://www.patreon.com/15270903/join" target="_blank" rel="noopener noreferrer"
                     aria-label="Apoyanos en Patreon">
                     <svg class="icon-patreon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                        <path d="M15.386.524c-4.764 0-8.64 3.876-8.64 8.64 0 4.75 3.876 8.613 8.64 8.613 4.75 0 8.614-3.864 8.614-8.613C24 4.4 20.136.524 15.386.524zM.003 23.476h4.22V.524H.003v22.952z"/>
+                        <path
+                            d="M15.386.524c-4.764 0-8.64 3.876-8.64 8.64 0 4.75 3.876 8.613 8.64 8.613 4.75 0 8.614-3.864 8.614-8.613C24 4.4 20.136.524 15.386.524zM.003 23.476h4.22V.524H.003v22.952z" />
                     </svg>
                 </a>
-                <a href="https://www.linkedin.com/feed/update/urn:li:activity:7407061195704406016/" target="_blank" rel="noopener noreferrer"
-                    aria-label="Siguenos en LinkedIn">
+                <a href="https://www.linkedin.com/feed/update/urn:li:activity:7407061195704406016/" target="_blank"
+                    rel="noopener noreferrer" aria-label="Siguenos en LinkedIn">
                     <svg class="icon-linkedin" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        <path
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                 </a>
             </div>
@@ -443,6 +530,7 @@
     <script src="js/charts.js"></script>
     <script src="js/onboarding.js"></script>
     <script src="js/visitor-counter.js"></script>
+    <script src="js/exportManager.js"></script>
     <script src="js/app.js"></script>
 </body>
 

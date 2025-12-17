@@ -1,5 +1,92 @@
-Documento Maestro de Ingeniería: Sistema de Exportación de ResultadosVersión: 2.1 (Final - Layout Carta + Modal Selección)Fecha: 17 de Diciembre, 2025Proyecto: BaldoraMódulo: Analíticas / ReportesDependencias: html2pdf.jsEstado: 📝 Especificación Técnica1. Visión GeneralEste módulo expande la capacidad de análisis del juego permitiendo al usuario exportar sus resultados finales. Se reemplaza la descarga directa por un flujo de decisión mediante una ventana modal central.Flujo de Usuario (UX)Dashboard: El usuario termina la sesión y visualiza sus gráficas en pantalla.Clic: Presiona el botón renombrado "Descargar Resultados".Decisión: Se abre una ventana modal en el centro de la pantalla.Selección: El usuario elige entre CSV (Datos crudos) o PDF (Reporte visual ejecutivo con análisis AI).2. Especificación de UI: El Modal de SelecciónEste componente actúa como distribuidor de tráfico. Debe ser consistente con el sistema de diseño "Acuarela Digital" (Main_doc_f3.md).2.1. Diseño del ModalElementoEspecificaciónTítulo"Descargar Resultados" (Fuente Oswald, Color Rose-500)DisposiciónGrid de 2 columnas (Botón PDF a la izquierda, CSV a la derecha)Estilo BotonesBotones grandes (Cards clickeables), rectangulares verticales2.2. Opciones de ExportaciónOpción A: Reporte PDFOpción B: Datos CSVIcono: 📄 (Documento)Icono: 📊 (Gráfica)Texto Principal: "Reporte Visual"Texto Principal: "Datos CSV"Subtexto: "PDF tamaño carta con gráficas y análisis de IA."Subtexto: "Formato hoja de cálculo para análisis propio."Acción: Genera PDF visualAcción: Descarga archivo .csvEstilo: btn-primary (Destacado)Estilo: btn-secondary (Neutro)3. Especificación del Reporte PDF (Layout Estricto)El PDF se genera renderizando un contenedor HTML oculto (#pdf-wrapper) con dimensiones fijas para asegurar que todo quepa en una sola hoja sin desbordes.3.1. Configuración de HojaParámetroValorFormatoCarta (Letter)Dimensiones215.9mm x 279.4mmMárgenes15mm internos (padding del contenedor)Fondobaldora_background.png con Opacidad 9% (Marca de agua sutil)3.2. Estructura de Contenido (De arriba a abajo)Cabecera: Logo del menú y Título "Analíticas de Sesión".Métricas: Fila horizontal con Jugador, Fecha, Modo y Puntaje.Análisis AI: Bloque destacado para el comentario del entrenador virtual (Simulado o generado).Gráficas: Grid 2x2 compacto con las 4 gráficas del dashboard (Performance, Críticas, Errores, Velocidad).Pie de Página: Footer Institucional idéntico al sitio web (JCG Games + Instagram).4. Implementación Técnica4.1. Librería RequeridaAgregar en index.html (antes de cerrar el body):<script src="[https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js)"></script>
-4.2. HTML: Estructura del Modal y Plantilla OcultaAgregar al final del body en index.html.<!-- 1. MODAL DE SELECCIÓN (La ventana central visible) -->
+# Documento Maestro de Ingeniería: Sistema de Exportación de Resultados
+
+| **Campo** | **Valor** |
+|-----------|-----------|
+| **Versión** | 2.1 (Final - Layout Carta + Modal Selección) |
+| **Fecha** | 17 de Diciembre, 2025 |
+| **Proyecto** | Baldora |
+| **Módulo** | Analíticas / Reportes |
+| **Dependencias** | html2pdf.js |
+| **Estado** | 📝 Especificación Técnica |
+
+---
+
+## 1. Visión General
+
+Este módulo expande la capacidad de análisis del juego permitiendo al usuario exportar sus resultados finales. Se reemplaza la descarga directa por un flujo de decisión mediante una ventana modal central.
+
+### Flujo de Usuario (UX)
+
+1. **Dashboard**: El usuario termina la sesión y visualiza sus gráficas en pantalla.
+2. **Clic**: Presiona el botón renombrado "Descargar Resultados".
+3. **Decisión**: Se abre una ventana modal en el centro de la pantalla.
+4. **Selección**: El usuario elige entre CSV (Datos crudos) o PDF (Reporte visual ejecutivo con análisis AI).
+
+---
+
+## 2. Especificación de UI: El Modal de Selección
+
+Este componente actúa como distribuidor de tráfico. Debe ser consistente con el sistema de diseño "Acuarela Digital" (Main_doc_f3.md).
+
+### 2.1. Diseño del Modal
+
+| Elemento | Especificación |
+|----------|----------------|
+| **Título** | "Descargar Resultados" (Fuente Oswald, Color Rose-500) |
+| **Disposición** | Grid de 2 columnas (Botón PDF a la izquierda, CSV a la derecha) |
+| **Estilo Botones** | Botones grandes (Cards clickeables), rectangulares verticales |
+
+### 2.2. Opciones de Exportación
+
+| Atributo | Opción A: Reporte PDF | Opción B: Datos CSV |
+|----------|----------------------|---------------------|
+| **Icono** | 📄 (Documento) | 📊 (Gráfica) |
+| **Texto Principal** | "Reporte Visual" | "Datos CSV" |
+| **Subtexto** | "PDF tamaño carta con gráficas y análisis de IA." | "Formato hoja de cálculo para análisis propio." |
+| **Acción** | Genera PDF visual | Descarga archivo .csv |
+| **Estilo** | btn-primary (Destacado) | btn-secondary (Neutro) |
+
+---
+
+## 3. Especificación del Reporte PDF (Layout Estricto)
+
+El PDF se genera renderizando un contenedor HTML oculto (`#pdf-wrapper`) con dimensiones fijas para asegurar que todo quepa en una sola hoja sin desbordes.
+
+### 3.1. Configuración de Hoja
+
+| Parámetro | Valor |
+|-----------|-------|
+| **Formato** | Carta (Letter) |
+| **Dimensiones** | 215.9mm x 279.4mm |
+| **Márgenes** | 15mm internos (padding del contenedor) |
+| **Fondo** | baldora_background.png con Opacidad 9% (Marca de agua sutil) |
+
+### 3.2. Estructura de Contenido (De arriba a abajo)
+
+1. **Cabecera**: Logo del menú y Título "Analíticas de Sesión".
+2. **Métricas**: Fila horizontal con Jugador, Fecha, Modo y Puntaje.
+3. **Análisis AI**: Bloque destacado para el comentario del entrenador virtual (Simulado o generado).
+4. **Gráficas**: Grid 2x2 compacto con las 4 gráficas del dashboard (Performance, Críticas, Errores, Velocidad).
+5. **Pie de Página**: Footer Institucional idéntico al sitio web (JCG Games + Instagram).
+
+---
+
+## 4. Implementación Técnica
+
+### 4.1. Librería Requerida
+
+Agregar en `index.html` (antes de cerrar el body):
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+```
+
+### 4.2. HTML: Estructura del Modal y Plantilla Oculta
+
+Agregar al final del body en `index.html`.
+
+```html
+<!-- 1. MODAL DE SELECCIÓN (La ventana central visible) -->
 <div id="modal-export" class="modal-overlay">
     <div class="modal-content panel-base" style="text-align: center; max-width: 550px;">
         <h2 style="font-family: var(--font-display); color: var(--clr-rose-500); margin-bottom: 10px;">
@@ -87,7 +174,14 @@ Documento Maestro de Ingeniería: Sistema de Exportación de ResultadosVersión:
         </footer>
     </div>
 </div>
-4.3. Estilos CSS (Strict Layout & Branding)Agregar a styles.css. Estas reglas aseguran que el PDF tenga exactamente el tamaño de una hoja carta y que los elementos no se desborden./* --- PDF LETTER LAYOUT --- */
+```
+
+### 4.3. Estilos CSS (Strict Layout & Branding)
+
+Agregar a `styles.css`. Estas reglas aseguran que el PDF tenga exactamente el tamaño de una hoja carta y que los elementos no se desborden.
+
+```css
+/* --- PDF LETTER LAYOUT --- */
 .pdf-letter-container {
     width: 215.9mm; 
     height: 279.4mm; /* Carta Exacto */
@@ -149,7 +243,14 @@ Documento Maestro de Ingeniería: Sistema de Exportación de ResultadosVersión:
 /* Footer */
 .pdf-footer { border-top: 1px solid var(--clr-sand-300); padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--clr-rock-500); }
 .footer-logo, .footer-social-icon { height: 16px; margin-right: 5px; vertical-align: middle; }
-4.4. Lógica JavaScript (js/exportManager.js)Crear este objeto o integrarlo en app.js.const ExportManager = {
+```
+
+### 4.4. Lógica JavaScript (js/exportManager.js)
+
+Crear este objeto o integrarlo en `app.js`.
+
+```javascript
+const ExportManager = {
     // 1. Abrir Modal (Conectado al botón "Descargar Resultados")
     openModal() {
         document.getElementById('modal-export').classList.add('active');
@@ -223,4 +324,15 @@ Documento Maestro de Ingeniería: Sistema de Exportación de ResultadosVersión:
         closeModal('modal-export');
     }
 };
-5. Checklist de Integración[ ] Dependencia: Verificar que el script de html2pdf esté cargado.[ ] Assets: Asegurar que logo_menu.png, jcg_logo.png y icon_instagram_black.png existan en la carpeta /images.[ ] HTML: Copiar el bloque del modal y el bloque del template oculto al index.html.[ ] CSS: Copiar los estilos PDF al styles.css.[ ] JS: Implementar ExportManager y conectar el botón del dashboard a ExportManager.openModal().[ ] Prueba: Verificar que el PDF generado se vea nítido, encaje en una hoja y tenga la transparencia correcta.
+```
+
+---
+
+## 5. Checklist de Integración
+
+- [ ] **Dependencia**: Verificar que el script de html2pdf esté cargado.
+- [ ] **Assets**: Asegurar que `logo_menu.png`, `jcg_logo.png` y `icon_instagram_black.png` existan en la carpeta `/images`.
+- [ ] **HTML**: Copiar el bloque del modal y el bloque del template oculto al `index.html`.
+- [ ] **CSS**: Copiar los estilos PDF al `styles.css`.
+- [ ] **JS**: Implementar ExportManager y conectar el botón del dashboard a `ExportManager.openModal()`.
+- [ ] **Prueba**: Verificar que el PDF generado se vea nítido, encaje en una hoja y tenga la transparencia correcta.
