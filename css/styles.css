@@ -2039,7 +2039,9 @@ body::before {
     transform: scale(1.1);
 }
 
-.icon-instagram {
+.icon-instagram,
+.icon-patreon,
+.icon-linkedin {
     display: block;
 }
 
