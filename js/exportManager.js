@@ -31,14 +31,24 @@ const ExportManager = {
 
     // 4. Opción PDF (Genera reporte visual usando jsPDF directamente)
     async downloadPDF() {
-        // Verificar que jsPDF esté disponible (viene incluido en html2pdf bundle)
-        if (!window.jspdf) {
-            alert('Error: La librería jsPDF no está cargada');
+        // Verificar que jsPDF esté disponible (puede venir de jspdf standalone o html2pdf bundle)
+        let jsPDFClass = null;
+
+        // Intentar obtener jsPDF de diferentes fuentes posibles
+        if (window.jspdf && window.jspdf.jsPDF) {
+            jsPDFClass = window.jspdf.jsPDF;
+        } else if (window.jsPDF) {
+            jsPDFClass = window.jsPDF;
+        }
+
+        if (!jsPDFClass) {
+            alert('Error: La librería jsPDF no está cargada. Por favor recarga la página.');
+            console.error('jsPDF no encontrado. window.jspdf:', window.jspdf, 'window.jsPDF:', window.jsPDF);
             return;
         }
 
-        // Obtener jsPDF del bundle de html2pdf
-        const { jsPDF } = window.jspdf;
+        // Usar la clase encontrada
+        const jsPDF = jsPDFClass;
 
         // A. Recopilar datos de sesión
         const nickname = DataManager.nickname || 'Invitado';
