@@ -1,11 +1,11 @@
 /**
  * GEMINI SERVICE - Integración con Firebase AI Logic (Modular - Gemini Developer API)
  * Baldora - AI Coach / Análisis Cognitivo
- * Versión: 6.0 (Modular ES6 - Strict Documentation Compliance)
+ * Versión: 7.0 (Modular con Import Map)
  */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-ai.js";
+import { initializeApp } from "firebase/app";
+import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -20,12 +20,10 @@ const firebaseConfig = {
 };
 
 // 1. Initialize FirebaseApp
-// Usamos un nombre único para evitar conflictos con la app global si existe
 let app;
 try {
     app = initializeApp(firebaseConfig, "GeminiModularApp");
 } catch (e) {
-    // Si falla (ej. nombre duplicado), intentamos inicializar sin nombre o reusar
     app = initializeApp(firebaseConfig);
 }
 
@@ -159,8 +157,5 @@ Reglas de Tono y Formato:
     }
 };
 
-// EXPOSICIÓN GLOBAL CRÍTICA
-// Al ser un módulo, GeminiService es local. Debemos asignarlo a window explícitamente
-// para que el onclick="GeminiService.triggerAnalysis()" del HTML funcione.
+// EXPOSICIÓN GLOBAL
 window.GeminiService = GeminiService;
-console.log('[GeminiService Modular] Servicio registrado globalmente.');

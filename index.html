@@ -41,6 +41,15 @@
     <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-database-compat.js"></script>
     <!-- Firebase AI Logic SDK (Gemini Developer API) -->
     <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-vertexai-compat.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "firebase/app": "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js",
+          "firebase/ai": "https://www.gstatic.com/firebasejs/11.0.0/firebase-ai.js"
+        }
+      }
+    </script>
     <script>
         // Configuración de Firebase (según Main_doc_f8_AI.md)
         const firebaseConfig = {
