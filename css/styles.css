@@ -2533,7 +2533,7 @@ body::before {
 }
 
 .character-avatar-wrapper {
-    width: 70px;
+    width: 150px;
     height: auto;
     overflow: visible;
     background: transparent;
