@@ -1,45 +1,44 @@
 /**
- * GEMINI SERVICE - Integración con Firebase Vertex AI (Compat Mode)
+ * GEMINI SERVICE - Integración con Firebase AI Logic (Prompt Templates)
  * Baldora - AI Coach / Análisis Cognitivo
- * Versión: 8.0 (Usando SDK Compat disponible en CDN)
+ * Versión: 11.0 (Usando Prompt Template "baldora" desde Firebase Console)
  */
 
-// Usamos el SDK de Vertex AI que está cargado globalmente via CDN (firebase-vertexai-compat.js)
-// No usamos ES6 imports porque firebase/ai no existe en la CDN
+import { initializeApp } from "firebase/app";
+import { getAI, getTemplateGenerativeModel, GoogleAIBackend } from "firebase/ai";
+
+// Configuración de Firebase (obtenida de window.firebaseConfig definida en index.html)
+const firebaseConfig = window.firebaseConfig;
+
+if (!firebaseConfig) {
+    console.error("[GeminiService] Firebase Config no encontrada. Verifique index.html");
+}
+
+// Initialize FirebaseApp
+let firebaseApp;
+try {
+    firebaseApp = initializeApp(firebaseConfig, "GeminiModularApp");
+} catch (e) {
+    // Si ya existe, usar esa instancia
+    firebaseApp = initializeApp(firebaseConfig);
+}
+
+// Initialize the Gemini Developer API backend service
+const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
+
+// Create a TemplateGenerativeModel using the "baldora" template ID from Firebase Console
+// Esto permite cambiar el modelo y el prompt desde la consola sin modificar código
+const model = getTemplateGenerativeModel(ai, { templateId: "baldora" });
+
+console.log("[GeminiService] Plantilla 'baldora' inicializada correctamente.");
 
 const GeminiService = {
     currentState: 'idle',
-    model: null,
-
-    /**
-     * Inicializa el modelo de Gemini usando Vertex AI
-     */
-    init() {
-        try {
-            // Verificar que Firebase esté disponible
-            if (typeof firebase === 'undefined' || !window.firebaseApp) {
-                console.error('[GeminiService] Firebase no está inicializado.');
-                return false;
-            }
-
-            // Inicializar Vertex AI usando el SDK compat
-            const vertexAI = firebase.vertexAI(window.firebaseApp);
-
-            // Crear modelo generativo (gemini-2.5-pro según configuración)
-            this.model = vertexAI.getGenerativeModel({ model: "gemini-2.5-pro" });
-
-            console.log('[GeminiService] Inicializado correctamente con gemini-2.5-pro');
-            return true;
-        } catch (error) {
-            console.error('[GeminiService] Error al inicializar:', error);
-            return false;
-        }
-    },
 
     async triggerAnalysis() {
         console.log('[GeminiService] Trigger analysis solicitado.');
 
-        // Confirmación visual inmediata en el botón (si existe)
+        // Confirmación visual inmediata en el botón
         const btn = document.querySelector('.ai-action-btn');
         if (btn) {
             btn.innerText = 'Procesando...';
@@ -49,14 +48,6 @@ const GeminiService = {
         }
 
         this.setUIState('loading');
-
-        // Inicializar modelo si no está listo
-        if (!this.model) {
-            if (!this.init()) {
-                this.handleError(new Error("No se pudo inicializar el servicio de IA."));
-                return;
-            }
-        }
 
         // Obtener historial (DataManager es global)
         const history = window.DataManager ? window.DataManager.sessionData : [];
@@ -82,39 +73,26 @@ const GeminiService = {
             return;
         }
 
-        // Construir el prompt (ahora lo hacemos aquí porque no usamos plantillas remotas)
-        const prompt = this.buildPrompt(csvContent);
-
         try {
-            console.log('[GeminiService] Enviando prompt a Gemini 2.5 Pro...');
+            console.log('[GeminiService] Enviando datos a la plantilla Baldora...');
 
-            const result = await this.model.generateContent(prompt);
-            const response = await result.response;
-            const aiText = response.text();
+            // Llamar a generateContent pasando las variables del template
+            // El template "baldora" espera una variable "csv_data" según la configuración en Firebase Console
+            const result = await model.generateContent({
+                csv_data: csvContent
+            });
+
+            const response = result.response;
+            const text = response.text();
 
             console.log('[GeminiService] Respuesta recibida.');
-            this.showResult(aiText);
-            window.lastAIAnalysis = aiText;
+            this.showResult(text);
+            window.lastAIAnalysis = text;
 
         } catch (error) {
             console.error('[GeminiService] Error:', error);
             this.handleError(error);
         }
-    },
-
-    buildPrompt(csvContent) {
-        return `Actúa como un experto en aprendizaje acelerado y análisis de datos educativos para examinar mis resultados de multiplicaciones (adjuntos en CSV), generando un reporte estricto que inicie con un diagnóstico ejecutivo de mi estado actual, comparando mi precisión y velocidad frente a estándares de maestría para evaluar mi progreso y nivel de confianza.
-
-Datos del CSV:
-${csvContent}
-
-Continúa con observaciones detalladas que identifiquen y expliquen la causa raíz de mis patrones de error, buscando 'cables cruzados' o fallos por velocidad para señalar mis tablas débiles de hoy, y concluye con un plan de acción práctico que incluya tres ejercicios breves de escritura y mnemotecnia, una rima para mi error más frecuente y una regla de oro mental para aplicar.
-
-Reglas de Tono y Formato:
-1. TONO: Debe ser SIEMPRE positivo, pedagógico y motivador.
-2. NO uses emoticones ni emojis.
-3. Responde en español.
-4. Sé conciso pero profundo.`;
     },
 
     setUIState(state) {
@@ -192,7 +170,4 @@ Reglas de Tono y Formato:
 // EXPOSICIÓN GLOBAL
 window.GeminiService = GeminiService;
 
-// Intentar inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function () {
-    GeminiService.init();
-});
+console.log('[GeminiService] Script cargado. Usando plantilla "baldora" de Firebase Console.');

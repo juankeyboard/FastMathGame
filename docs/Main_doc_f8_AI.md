@@ -51,7 +51,7 @@ El archivo `js/gemini-service.js` debe refactorizarse para usar la instancia glo
 
 ### Importaciones (ES Modules / Import Map)
 ```javascript
-import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
+import { getAI, getTemplateGenerativeModel, GoogleAIBackend } from "firebase/ai";
 ```
 
 ### Inicialización del Modelo
@@ -71,7 +71,8 @@ const ai = getAI(app, { backend: new GoogleAIBackend() });
 
 // 3. Instanciar el modelo usando el ID de la plantilla
 // Usamos 'baldora' que es el ID definido en Firebase Console
-const model = getGenerativeModel(ai, { model: "baldora" });
+// IMPORTANTE: Se usa getTemplateGenerativeModel para plantillas, no getGenerativeModel
+const model = getTemplateGenerativeModel(ai, { templateId: "baldora" });
 ```
 
 ---
