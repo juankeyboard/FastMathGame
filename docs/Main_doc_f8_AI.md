@@ -1,94 +1,101 @@
-# Guía de Configuración: Análisis de CSV con Gemini y Firebase AI Logic
+# Guía de Implementación: Entrenador Virtual con Firebase AI Logic
 
-Esta guía detalla el proceso técnico para integrar la API de Gemini en tu juego utilizando los SDKs de Firebase AI Logic, permitiendo el análisis de archivos `.csv` generados al final de la partida.
-
----
-
-## 1. Requisitos Previos
-
-- Un entorno de desarrollo para aplicaciones Web (JavaScript/Node.js).
-- Una cuenta de Google con acceso a Firebase Console.
-- El archivo `.csv` generado por tu juego debe ser accesible como cadena de texto (string) o buffer para ser enviado al modelo.
+Este documento detalla la arquitectura y configuración para el "Entrenador Virtual" de Baldora, utilizando **Firebase AI Logic** (Gemini Developer API) para analizar el rendimiento del jugador de forma segura y escalable, eliminando la necesidad de exponer API Keys sensibles directamente en los módulos de lógica.
 
 ---
 
-## 2. Configuración del Proyecto en Firebase
+## 1. Arquitectura y Seguridad
 
-### Paso 1: Crear y conectar el proyecto
-1. Accede a la consola de Firebase y selecciona tu proyecto.
-2. Ve a la sección **AI Logic** en el menú lateral.
-3. Haz clic en **Comenzar** para habilitar las APIs necesarias.
-4. Selecciona el proveedor **Gemini API**.
-   - *Recomendación:* Usa **Gemini Developer API** (disponible en el plan Spark sin costo) para pruebas iniciales.
-5. Registra tu aplicación web para obtener el objeto `firebaseConfig`.
+### ¿Por qué Firebase AI Logic?
+Utilizamos el SDK de cliente de Firebase (`firebase/ai`) que actúa como un puente seguro hacia los modelos de Gemini.
+1.  **Abstracción de Credenciales:** No se requiere hardcodear la API Key en el archivo del servicio (`gemini-service.js`). El SDK utiliza la configuración global del proyecto Firebase.
+2.  **Seguridad:** Permite integrar **Firebase App Check** para validar que las peticiones provienen de tu app legítima, protegiendo tu cuota de uso.
+3.  **Integración:** Se conecta nativamente con la instancia de `firebaseApp` ya existente en el navegador.
 
-### Paso 2: Seguridad (App Check)
-Se recomienda configurar **Firebase App Check** antes de pasar a producción para proteger tus llamadas a la API de Gemini de usos no autorizados.
+### Flujo de Datos
+1.  **Juego:** Recopila métricas (aciertos, errores, tiempos) en `DataManager`.
+2.  **Frontend:** `GeminiService` convierte el historial a formato CSV.
+3.  **SDK Firebase AI:** Envía el prompt + CSV a la infraestructura de Google (Vertex AI / Gemini API).
+4.  **Gemini:** Procesa la información y devuelve un diagnóstico pedagógico estructurado.
 
 ---
 
-## 3. Instalación e Inicialización del SDK
+## 2. Configuración del Proyecto
 
-### Instalación
-Instala el SDK de Firebase mediante npm (si usas bundler) o usa CDN:
+### Requisitos en Firebase Console
+1.  Habilitar **AI Logic (Vertex AI in Firebase)** en la consola de Firebase.
+2.  Asegurar que la **Gemini Developer API** esté habilitada (disponible en planes Spark y Blaze).
+3.  Agregar la Web App al proyecto para obtener el `firebaseConfig` (si no se ha hecho).
 
-```bash
-npm install firebase
-```
-
-### Inicialización técnica
-Configura el backend de AI Logic en tu código principal:
+### Inicialización Global
+Para evitar duplicidad y exposición de claves, la configuración de Firebase debe residir **únicamente** en el punto de entrada de la aplicación (`index.html` o `main.js`), no en los servicios individuales.
 
 ```javascript
-import { initializeApp } from "firebase/app";
-import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
-
-// Configuración de tu app (obtenida en la consola de Firebase)
+// index.html
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "tu-app.firebaseapp.com",
-  projectId: "tu-app",
-  storageBucket: "tu-app.appspot.com",
-  messagingSenderId: "ID_SENDER",
-  appId: "ID_APP"
+  apiKey: "...", // Clave pública del proyecto (segura de exponer con App Check)
+  authDomain: "...",
+  projectId: "...",
+  // ...
 };
-
-// Inicializar Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-
-// Inicializar el servicio de backend de Gemini
-const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
-
-// Crear instancia del modelo (se recomienda gemini-2.5-flash por su velocidad y costo)
-const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+// Exponer para uso en módulos
+window.firebaseApp = firebaseApp;
 ```
 
 ---
 
-## 4. Lógica de Análisis del archivo .csv
+## 3. Implementación del Servicio (GeminiService)
 
-Para procesar el archivo `.csv` de tu juego, debes leer el contenido del archivo y enviarlo como parte del prompt. Gemini es excelente procesando datos estructurados en texto.
+El archivo `js/gemini-service.js` debe refactorizarse para usar la instancia global.
 
-### Función de análisis:
+### Importaciones (ES Modules / Import Map)
+```javascript
+import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
+```
+
+### Inicialización del Modelo
+En lugar de definir `firebaseConfig` nuevamente, accedemos a la instancia global.
+
+```javascript
+// 1. Obtener la instancia de Firebase ya inicializada
+const app = window.firebaseApp; 
+
+if (!app) {
+    console.error("Firebase App no inicializada. Verifique index.html");
+}
+
+// 2. Inicializar Backend de AI (Gemini Developer API)
+// Esto conecta el SDK con el servicio de Google
+const ai = getAI(app, { backend: new GoogleAIBackend() });
+
+// 3. Instanciar el modelo usando el ID de la plantilla
+// Usamos 'baldora' que es el ID definido en Firebase Console
+const model = getGenerativeModel(ai, { model: "baldora" });
+```
+
+---
+
+## 4. Ingeniería del Prompt con Plantillas (Prompt Templates)
+
+En lugar de escribir el prompt en el código, utilizamos la función de **Prompt Templates** de Firebase AI Logic. Esto permite a los diseñadores pedagógicos ajustar las instrucciones en la consola sin requerir cambios en el código.
+
+### Configuración en Consola
+- **Template ID:** `baldora`
+- **Modelo:** `gemini-2.5-pro`
+- **Input Schema:** `{ csv_data: string }`
+
+### Implementación en Código:
 
 ```javascript
 async function analizarResultadosJuego(contenidoCSV) {
   try {
-    // Definir el prompt de contexto para Gemini
-    const prompt = `
-      Actúa como un analista de datos de videojuegos. 
-      A continuación te proporciono un archivo CSV con los resultados de la partida actual. 
-      Por favor, analiza el desempeño del jugador y devuelve un resumen con:
-      1. Puntuación final y ranking.
-      2. Áreas de mejora detectadas.
-      3. Un mensaje motivador personalizado.
-
-      Datos del CSV:
-      ${contenidoCSV}
-    `;
-
-    // Llamada a la API de Gemini
-    const result = await model.generateContent(prompt);
+    // Llamada a la API usando la plantilla
+    // Solo enviamos los datos variables, no el prompt
+    const result = await model.generateContent({
+      csv_data: contenidoCSV
+    });
+    
     const response = result.response;
     const textoResultado = response.text();
 
@@ -97,37 +104,23 @@ async function analizarResultadosJuego(contenidoCSV) {
     
   } catch (error) {
     console.error("Error al analizar el CSV:", error);
-    // Implementar reintentos con backoff exponencial si es necesario
   }
 }
 ```
 
 ---
 
-## 5. Detalles Técnicos Importantes
+## 5. Manejo de Errores y UI
 
-### Modelos Disponibles
-- **Gemini 2.5 Flash:** Optimizado para velocidad y eficiencia. Ideal para análisis rápidos de fin de juego.
-- **Gemini 1.5 Pro:** Mayor capacidad de razonamiento para análisis complejos o archivos CSV muy extensos.
+El servicio debe manejar los estados de la interfaz de usuario:
 
-### Parámetros de Generación (Opcional)
-Puedes ajustar la "creatividad" del análisis configurando la temperatura:
-
-```javascript
-const model = getGenerativeModel(ai, { 
-  model: "gemini-2.5-flash",
-  generationConfig: {
-    temperature: 0.7, // Ajusta entre 0 (preciso) y 1 (creativo)
-    maxOutputTokens: 1000
-  }
-});
-```
-
-### Manejo de Errores y Depuración
-Siguiendo las mejores prácticas de desarrollo:
-- **Validación:** Asegúrate de que el CSV no esté vacío antes de enviarlo.
-- **Backoff:** Si la API devuelve un error de cuota, implementa una espera de 1s, 2s, 4s antes de reintentar.
-- **Privacidad:** No incluyas datos personales sensibles del usuario en el CSV enviado a la API pública.
+*   **Estado Idle:** Botón "Analizar mis Resultados" visible.
+*   **Estado Loading:** Spinner y mensajes de carga ("Conectando sinapsis...").
+*   **Estado Success:** Mostrar respuesta renderizada (respetando saltos de línea).
+*   **Manejo de Errores:**
+    *   Si `DataManager` está vacío: Avisar al usuario que debe jugar primero.
+    *   Si falla la API (red, cuota): Mostrar mensaje amigable y opción de reintentar.
 
 ---
-*Documentación generada a partir del manual de Firebase AI Logic - Diciembre 2025.*
+
+*Documento de Diseño Técnico - Baldora 2026*

@@ -32,7 +32,10 @@ const ai = getAI(app, { backend: new GoogleAIBackend() });
 
 // 3. Create a `GenerativeModel` instance
 // Usamos gemini-2.5-flash según documentación reciente
-const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
+// 3. Create a `GenerativeModel` instance
+// Usamos el ID de la plantilla definida en Firebase Console ("baldora")
+// Esto permite cambiar el prompt y el modelo (gemini-2.5-pro) desde la consola sin tocar código.
+const model = getGenerativeModel(ai, { model: "baldora" });
 
 const GeminiService = {
     currentState: 'idle',
@@ -65,11 +68,15 @@ const GeminiService = {
             return;
         }
 
-        const promptText = this.buildPrompt(csvContent);
-
         try {
-            console.log('[GeminiService Modular] Enviando prompt a Gemini...');
-            const result = await model.generateContent(promptText);
+            console.log('[GeminiService Modular] Enviando datos a la plantilla Baldora...');
+            
+            // Al usar una plantilla, pasamos un objeto con las variables definidas en el esquema (csv_data)
+            // No enviamos el prompt de texto, solo los datos.
+            const result = await model.generateContent({
+                csv_data: csvContent
+            });
+            
             const response = await result.response;
             const aiText = response.text();
 
@@ -83,25 +90,10 @@ const GeminiService = {
         }
     },
 
+    // buildPrompt ya no es necesario porque el prompt vive en Firebase Console
+    // Se mantiene vacío o se elimina para limpieza
     buildPrompt(csvContent) {
-        return `Actúa como un experto en aprendizaje acelerado y análisis de datos educativos para examinar mis resultados recientes en el juego 'Baldora' (adjuntos en CSV), generando un reporte estricto que inicie con un diagnóstico ejecutivo de mi estado actual, comparando mi precisión y velocidad frente a estándares de maestría para evaluar mi progreso y nivel de confianza.
-
-Datos del CSV:
-${csvContent}
-
-Instrucciones:
-1. Diagnóstico Ejecutivo: Evalúa mi estado actual basándote en los datos.
-2. Observaciones Detalladas: Identifica y explica la causa raíz de mis patrones de error, buscando 'cables cruzados' o fallos por velocidad para señalar mis tablas débiles de hoy.
-3. Plan de Acción Práctico:
-   - Tres ejercicios breves de escritura y mnemotecnia.
-   - Una rima para mi error más frecuente (si hubo errores).
-   - Una regla de oro mental para aplicar durante el juego.
-
-Reglas de Tono y Formato:
-1. TONO: Debe ser SIEMPRE positivo, pedagógico y motivador.
-2. NO uses emoticones ni emojis.
-3. Responde en español.
-4. Sé conciso pero profundo.`;
+        return ""; 
     },
 
     setUIState(state) {
