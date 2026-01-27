@@ -1,7 +1,7 @@
 /**
- * GEMINI SERVICE - Integración con Firebase AI Logic (Prompt Templates)
+ * GEMINI SERVICE - Integración con Firebase AI Logic (Gemini Developer API)
  * Baldora - AI Coach / Análisis Cognitivo
- * Versión: 14.0 (Usando Prompt Template "baldora" + App Check)
+ * Versión: 15.0 (Modelo directo gemini-2.5-flash-lite + App Check)
  */
 
 import { initializeApp } from "firebase/app";
@@ -42,12 +42,11 @@ console.log("[GeminiService] App Check inicializado correctamente.");
 // Initialize the Gemini Developer API backend service
 const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 
-// Create a GenerativeModel using the template ID "baldora"
-// La plantilla debe estar configurada en Firebase Console > AI Logic > Prompt Templates
-// El template debe tener una variable de entrada: csv_data (string)
-const model = getGenerativeModel(ai, { model: "baldora" });
+// Create a GenerativeModel instance with gemini-2.5-flash-lite
+// Este es el modelo directo de Gemini Developer API
+const model = getGenerativeModel(ai, { model: "gemini-2.5-flash-lite" });
 
-console.log("[GeminiService] Plantilla 'baldora' inicializada correctamente.");
+console.log("[GeminiService] Modelo gemini-2.5-flash-lite inicializado.");
 
 const GeminiService = {
     currentState: 'idle',
@@ -90,14 +89,14 @@ const GeminiService = {
             return;
         }
 
-        try {
-            console.log('[GeminiService] Enviando datos a la plantilla Baldora...');
+        // Construir el prompt completo
+        const prompt = this.buildPrompt(csvContent);
 
-            // Llamar a generateContent pasando las variables del template
-            // El template "baldora" espera una variable "csv_data" según la configuración
-            const result = await model.generateContent({
-                csv_data: csvContent
-            });
+        try {
+            console.log('[GeminiService] Enviando prompt a Gemini 2.5 Flash Lite...');
+
+            // Llamar a generateContent con el prompt de texto
+            const result = await model.generateContent(prompt);
 
             const response = result.response;
             const text = response.text();
@@ -110,6 +109,21 @@ const GeminiService = {
             console.error('[GeminiService] Error:', error);
             this.handleError(error);
         }
+    },
+
+    buildPrompt(csvContent) {
+        return `Actúa como un experto en aprendizaje acelerado y análisis de datos educativos para examinar mis resultados de multiplicaciones (adjuntos en CSV), generando un reporte estricto que inicie con un diagnóstico ejecutivo de mi estado actual, comparando mi precisión y velocidad frente a estándares de maestría para evaluar mi progreso y nivel de confianza.
+
+Datos del CSV:
+${csvContent}
+
+Continúa con observaciones detalladas que identifiquen y expliquen la causa raíz de mis patrones de error, buscando 'cables cruzados' o fallos por velocidad para señalar mis tablas débiles de hoy, y concluye con un plan de acción práctico que incluya tres ejercicios breves de escritura y mnemotecnia, una rima para mi error más frecuente y una regla de oro mental para aplicar.
+
+Reglas de Tono y Formato:
+1. TONO: Debe ser SIEMPRE positivo, pedagógico y motivador.
+2. NO uses emoticones ni emojis.
+3. Responde en español.
+4. Sé conciso pero profundo.`;
     },
 
     setUIState(state) {
@@ -187,4 +201,4 @@ const GeminiService = {
 // EXPOSICIÓN GLOBAL
 window.GeminiService = GeminiService;
 
-console.log('[GeminiService] Script cargado. Usando plantilla "baldora" de Firebase Console.');
+console.log('[GeminiService] Script cargado. Usando Gemini Developer API directamente.');
