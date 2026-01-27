@@ -8,22 +8,18 @@ import { initializeApp } from "firebase/app";
 import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
 
 // Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyDe9UK69r-s0ZiFIb2fNtS_AOouv2bWBhE",
-    authDomain: "baldora-89866.firebaseapp.com",
-    databaseURL: "https://baldora-89866-default-rtdb.firebaseio.com",
-    projectId: "baldora-89866",
-    storageBucket: "baldora-89866.firebasestorage.app",
-    messagingSenderId: "801097863804",
-    appId: "1:801097863804:web:6526f17db5b8443d27eff9",
-    measurementId: "G-RHWK9J2Z3S"
-};
+// 1. Initialize FirebaseApp using global config
+const firebaseConfig = window.firebaseConfig;
+if (!firebaseConfig) {
+    console.error("Firebase Config not found. Ensure it is defined in index.html");
+}
 
-// 1. Initialize FirebaseApp
 let app;
 try {
+    // Create a named app to avoid conflicts with the default compat app
     app = initializeApp(firebaseConfig, "GeminiModularApp");
 } catch (e) {
+    // Fallback
     app = initializeApp(firebaseConfig);
 }
 
@@ -31,10 +27,8 @@ try {
 const ai = getAI(app, { backend: new GoogleAIBackend() });
 
 // 3. Create a `GenerativeModel` instance
-// Usamos gemini-2.5-flash según documentación reciente
-// 3. Create a `GenerativeModel` instance
-// Usamos el ID de la plantilla definida en Firebase Console ("baldora")
-// Esto permite cambiar el prompt y el modelo (gemini-2.5-pro) desde la consola sin tocar código.
+// Usamos el ID de la plantilla "baldora" configurada en Firebase Console.
+// Esta plantilla está configurada internamente para usar el modelo "gemini-2.5-pro".
 const model = getGenerativeModel(ai, { model: "baldora" });
 
 const GeminiService = {
@@ -70,13 +64,13 @@ const GeminiService = {
 
         try {
             console.log('[GeminiService Modular] Enviando datos a la plantilla Baldora...');
-            
+
             // Al usar una plantilla, pasamos un objeto con las variables definidas en el esquema (csv_data)
             // No enviamos el prompt de texto, solo los datos.
             const result = await model.generateContent({
                 csv_data: csvContent
             });
-            
+
             const response = await result.response;
             const aiText = response.text();
 
@@ -93,7 +87,7 @@ const GeminiService = {
     // buildPrompt ya no es necesario porque el prompt vive en Firebase Console
     // Se mantiene vacío o se elimina para limpieza
     buildPrompt(csvContent) {
-        return ""; 
+        return "";
     },
 
     setUIState(state) {
