@@ -36,6 +36,17 @@ const GeminiService = {
 
     async triggerAnalysis() {
         console.log('[GeminiService Modular] Trigger analysis solicitado.');
+
+        // Confirmación visual inmediata en el botón (si existe)
+        const btn = document.querySelector('.ai-action-btn');
+        if (btn) {
+            const originalText = btn.innerText;
+            btn.innerText = 'Procesando...';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'wait';
+        }
+
         this.setUIState('loading');
 
         // Obtener historial (DataManager es global)
