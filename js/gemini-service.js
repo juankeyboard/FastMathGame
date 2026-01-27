@@ -1,12 +1,12 @@
 /**
  * GEMINI SERVICE - Integración con Firebase AI Logic (Prompt Templates)
  * Baldora - AI Coach / Análisis Cognitivo
- * Versión: 12.0 (Con App Check habilitado)
+ * Versión: 14.0 (Usando Prompt Template "baldora" + App Check)
  */
 
 import { initializeApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { getAI, getTemplateGenerativeModel, GoogleAIBackend } from "firebase/ai";
+import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
 
 // Configuración de Firebase (obtenida de window.firebaseConfig definida en index.html)
 const firebaseConfig = window.firebaseConfig;
@@ -25,7 +25,6 @@ try {
 }
 
 // Inicializar App Check con reCAPTCHA v3
-// IMPORTANTE: Reemplaza 'TU_SITE_KEY_AQUI' con tu Site Key de reCAPTCHA v3 de Firebase Console
 const RECAPTCHA_SITE_KEY = '6LdHG1gsAAAAAHfo4psSdnoXJobJZL0byWyj0eSV';
 
 // En desarrollo local, habilitar modo debug
@@ -43,8 +42,10 @@ console.log("[GeminiService] App Check inicializado correctamente.");
 // Initialize the Gemini Developer API backend service
 const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 
-// Create a TemplateGenerativeModel using the "baldora" template ID from Firebase Console
-const model = getTemplateGenerativeModel(ai, { templateId: "baldora" });
+// Create a GenerativeModel using the template ID "baldora"
+// La plantilla debe estar configurada en Firebase Console > AI Logic > Prompt Templates
+// El template debe tener una variable de entrada: csv_data (string)
+const model = getGenerativeModel(ai, { model: "baldora" });
 
 console.log("[GeminiService] Plantilla 'baldora' inicializada correctamente.");
 
@@ -93,6 +94,7 @@ const GeminiService = {
             console.log('[GeminiService] Enviando datos a la plantilla Baldora...');
 
             // Llamar a generateContent pasando las variables del template
+            // El template "baldora" espera una variable "csv_data" según la configuración
             const result = await model.generateContent({
                 csv_data: csvContent
             });
@@ -185,4 +187,4 @@ const GeminiService = {
 // EXPOSICIÓN GLOBAL
 window.GeminiService = GeminiService;
 
-console.log('[GeminiService] Script cargado. Usando plantilla "baldora" con App Check habilitado.');
+console.log('[GeminiService] Script cargado. Usando plantilla "baldora" de Firebase Console.');
