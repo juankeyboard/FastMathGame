@@ -340,6 +340,52 @@
                         </div>
                         <div id="ai-state-success" class="ai-state-box" style="display: none;">
                             <div id="ai-response-text" class="ai-text-bubble"></div>
+
+                            <!-- API Results Container -->
+                            <div id="api-results-container" class="results-grid hidden">
+                                <!-- Bloque 1: Resumen General -->
+                                <div class="result-card yellow-theme">
+                                    <h3>&#128202; Resumen General</h3>
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <span class="label">M&aacute;s R&aacute;pida:</span>
+                                            <span id="res-rapid" class="value">--</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="label">M&aacute;s Lenta:</span>
+                                            <span id="res-slow" class="value">--</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="label">Promedio:</span>
+                                            <span id="res-avg" class="value">--</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="label">Asertividad:</span>
+                                            <span id="res-accuracy" class="value">--</span>
+                                        </div>
+                                        <div class="stat-row">
+                                            <span class="success">Correctas: <strong id="res-correct">0</strong></span>
+                                            <span class="danger">Incorrectas: <strong id="res-wrong">0</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bloque 2: Patrón de Errores -->
+                                <div class="result-card yellow-theme">
+                                    <h3>&#9888;&#65039; Patr&oacute;n de Errores</h3>
+                                    <p id="res-patterns" class="result-text">
+                                        Analizando tus respuestas...
+                                    </p>
+                                </div>
+
+                                <!-- Bloque 3: Plan de Acción -->
+                                <div class="result-card yellow-theme">
+                                    <h3>&#128640; Plan de Acci&oacute;n</h3>
+                                    <p id="res-plan" class="result-text">
+                                        Generando recomendaciones...
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

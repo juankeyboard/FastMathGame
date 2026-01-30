@@ -101,9 +101,12 @@ const GeminiService = {
             const response = result.response;
             const text = response.text();
 
+            // Limpieza básica de Markdown json si existe
+            const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+
             console.log('[GeminiService] Respuesta recibida.');
-            this.showResult(text);
-            window.lastAIAnalysis = text;
+            this.showResult(cleanText);
+            window.lastAIAnalysis = cleanText;
 
         } catch (error) {
             console.error('[GeminiService] Error:', error);
@@ -112,18 +115,38 @@ const GeminiService = {
     },
 
     buildPrompt(csvContent) {
-        return `Actúa como un experto en aprendizaje acelerado y análisis de datos educativos para examinar mis resultados de multiplicaciones (adjuntos en CSV), generando un reporte estricto que inicie con un diagnóstico ejecutivo de mi estado actual, comparando mi precisión y velocidad frente a estándares de maestría para evaluar mi progreso y nivel de confianza.
+        return `
+**Role: System**
+Actúa como un experto en aprendizaje acelerado y análisis de datos educativos. Tu objetivo es analizar resultados de ejercicios de multiplicaciones y generar un reporte pedagógico positivo y motivador, formateado EXCLUSIVAMENTE como un objeto JSON válido.
 
-Datos del CSV:
-${csvContent}
-
-Continúa con observaciones detalladas que identifiquen y expliquen la causa raíz de mis patrones de error, buscando 'cables cruzados' o fallos por velocidad para señalar mis tablas débiles de hoy, y concluye con un plan de acción práctico que incluya tres ejercicios breves de escritura y mnemotecnia, una rima para mi error más frecuente y una regla de oro mental para aplicar.
-
-Reglas de Tono y Formato:
-1. TONO: Debe ser SIEMPRE positivo, pedagógico y motivador.
+Reglas:
+1. TONO: SIEMPRE positivo, pedagógico y motivador.
 2. NO uses emoticones ni emojis.
 3. Responde en español.
-4. Sé conciso pero profundo.`;
+4. ESTRUCTURA: Redacta la respuesta narrativa en exactamente 3 párrafos fluidos (uno para diagnóstico, uno para patrones, uno para plan).
+5. FORMATO: PROHIBIDO usar viñetas, listas, guiones o saltos de línea dentro de los campos. Texto corrido en bloque.
+6. FORMATO DE SALIDA: Entrega SOLAMENTE el objeto JSON crudo. No uses bloques de código markdown (json) ni texto adicional.
+
+El JSON debe tener exactamente esta estructura:
+{
+  "resumen_general": {
+    "operacion_mas_rapida": "Texto descriptivo",
+    "operacion_mas_lenta": "Texto descriptivo",
+    "tiempo_promedio": "Valor en segundos",
+    "porcentaje_asertividad": "Valor porcentual",
+    "cantidad_buenas": 0,
+    "cantidad_malas": 0
+  },
+  "patron_errores": "Diagnóstico ejecutivo y observaciones detalladas de patrones de error.",
+  "plan_accion": "Plan de acción concreto con ejercicios mnemotecnias."
+}
+
+**Role: User**
+Examina mis resultados de multiplicaciones en CSV:
+
+${csvContent}
+
+Genera un diagnóstico ejecutivo, observaciones detalladas de patrones de error, y un plan de acción con ejercicios y mnemotecnias, respetando estrictamente el formato JSON solicitado.`;
     },
 
     setUIState(state) {
@@ -144,9 +167,28 @@ Reglas de Tono y Formato:
     },
 
     showResult(text) {
+        let data = null;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.warn("[GeminiService] Fallo al parsear JSON, mostrando texto plano.", e);
+        }
+
         const textContainer = document.getElementById('ai-response-text');
-        if (textContainer) {
-            textContainer.innerHTML = text.replace(/\n/g, '<br>');
+        const resultsContainer = document.getElementById('api-results-container');
+
+        if (data && resultsContainer) {
+            // --- MODO JSON ---
+            this.renderApiResults(data);
+            if (textContainer) textContainer.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+        } else {
+            // --- MODO TEXTO FALLBACK ---
+            if (resultsContainer) resultsContainer.classList.add('hidden');
+            if (textContainer) {
+                textContainer.innerHTML = text.replace(/\n/g, '<br>');
+                textContainer.classList.remove('hidden');
+            }
         }
         this.setUIState('success');
 
@@ -157,6 +199,32 @@ Reglas de Tono y Formato:
             btn.disabled = false;
             btn.style.opacity = '1';
             btn.style.cursor = 'pointer';
+        }
+    },
+
+    renderApiResults(data) {
+        // 1. Resumen General
+        if (data.resumen_general) {
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val || '--';
+            };
+            setVal('res-rapid', data.resumen_general.operacion_mas_rapida);
+            setVal('res-slow', data.resumen_general.operacion_mas_lenta);
+            setVal('res-avg', data.resumen_general.tiempo_promedio);
+            setVal('res-accuracy', data.resumen_general.porcentaje_asertividad);
+            setVal('res-correct', data.resumen_general.cantidad_buenas);
+            setVal('res-wrong', data.resumen_general.cantidad_malas);
+        }
+
+        // 2 y 3. Narrativa
+        if (data.patron_errores) {
+            const el = document.getElementById('res-patterns');
+            if (el) el.textContent = data.patron_errores;
+        }
+        if (data.plan_accion) {
+            const el = document.getElementById('res-plan');
+            if (el) el.textContent = data.plan_accion;
         }
     },
 
