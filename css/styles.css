@@ -1451,10 +1451,39 @@ input[type="number"]:focus {
 
 /* ===== DASHBOARD ===== */
 
+#dashboard-view {
+    position: relative;
+    min-height: 100vh;
+    background-color: var(--clr-surface-high);
+    /* Tapa el fondo del body */
+    z-index: 1;
+    /* Asegura contexto de apilamiento */
+}
+
+#dashboard-view::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/Baldora_endbackground.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+    /* Igualdad de opacidad con body::before */
+    z-index: -1;
+    pointer-events: none;
+}
+
 .dashboard-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: var(--space-xl);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-header {
@@ -2703,6 +2732,7 @@ body::before {
         display: none;
     }
 }
+
 /* ===== API RESULTS VISUALIZATION ===== */
 /* Contenedor de la grilla de resultados */
 .results-grid {
@@ -2718,7 +2748,8 @@ body::before {
     padding: var(--space-lg);
     border-radius: var(--radius-lg);
     border: 2px solid var(--clr-sand-300);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05); /* Sombra suave */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    /* Sombra suave */
     transition: transform var(--transition-normal);
     display: flex;
     flex-direction: column;
@@ -2726,12 +2757,13 @@ body::before {
 
 .result-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* Tema Amarillo Claro (Solicitado) */
 .result-card.yellow-theme {
-    background-color: #fdf6b4; /* Amarillo claro coincidente con config-form */
+    background-color: #fdf6b4;
+    /* Amarillo claro coincidente con config-form */
     color: var(--clr-ink-900);
 }
 
@@ -2770,15 +2802,19 @@ body::before {
     justify-content: space-between;
     margin-top: var(--space-sm);
     padding-top: var(--space-sm);
-    border-top: 1px dashed rgba(0,0,0,0.1);
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
-.stat-row .success { color: var(--clr-green-500); }
-.stat-row .danger { color: var(--clr-rose-500); }
+.stat-row .success {
+    color: var(--clr-green-500);
+}
+
+.stat-row .danger {
+    color: var(--clr-rose-500);
+}
 
 .result-text {
     font-size: 1rem;
     line-height: 1.6;
     color: var(--clr-ink-900);
 }
-
