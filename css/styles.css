@@ -350,7 +350,11 @@ input[type="number"]:focus {
     border: 2px solid var(--clr-sand-300);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
-    margin: var(--space-md);
+    width: 95%;
+    /* Maximizar espacio pero con margen */
+    max-width: 1400px;
+    /* Limitar ancho en monitores grandes */
+    margin: var(--space-md) auto;
     box-shadow: 0 20px 40px -5px rgba(74, 144, 164, 0.15);
 }
 
@@ -722,6 +726,8 @@ input[type="number"]:focus {
 
 .config-container {
     max-width: 700px;
+    width: 90%;
+    /* Margen lateral en móviles */
     margin: 0 auto;
     padding: var(--space-xl);
 }
@@ -1451,39 +1457,21 @@ input[type="number"]:focus {
 
 /* ===== DASHBOARD ===== */
 
-#dashboard-view {
-    position: relative;
-    min-height: 100vh;
-    background-color: var(--clr-surface-high);
-    /* Tapa el fondo del body */
-    z-index: 1;
-    /* Asegura contexto de apilamiento */
-}
+/* ===== DASHBOARD ===== */
 
-#dashboard-view::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../images/Baldora_endbackground.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.6;
-    /* Igualdad de opacidad con body::before */
-    z-index: -1;
-    pointer-events: none;
-}
+/*#dashboard-view usa el fondo global del body heredado */
 
 .dashboard-container {
     max-width: 1200px;
-    margin: 0 auto;
+    width: 90%;
+    /* Margen lateral asegurado */
+    margin: 24px auto;
     padding: var(--space-xl);
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+    /* Container Transparente */
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .dashboard-header {
@@ -1717,6 +1705,8 @@ input[type="number"]:focus {
 
 /* ===== BACKGROUND IMAGE ===== */
 
+/* ===== BACKGROUND IMAGE ===== */
+
 body::before {
     content: '';
     position: fixed;
@@ -1729,7 +1719,6 @@ body::before {
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0.6;
-    /* 60% transparencia = 40% opacidad */
     z-index: -1;
     pointer-events: none;
 }
@@ -1976,6 +1965,8 @@ body::before {
     font-size: 0.9rem;
     position: relative;
     overflow: hidden;
+    z-index: 5;
+    /* Asegurar que el footer esté sobre el fondo global */
 }
 
 /* Imagen de fondo desvanecida al 15% */
@@ -1992,7 +1983,8 @@ body::before {
     background-repeat: no-repeat;
     opacity: 0.06;
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
+    /* Sobre el color de fondo */
 }
 
 .footer-content {
@@ -2004,7 +1996,8 @@ body::before {
     gap: var(--space-md);
     flex-wrap: wrap;
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    /* Sobre la imagen de fondo */
 }
 
 /* --- BLOQUE DE MARCA --- */
